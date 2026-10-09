@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%236f7dff'/%3E%3Cstop offset='.55' stop-color='%23c25bff'/%3E%3Cstop offset='1' stop-color='%23ff4fd8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%2305070f'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='url(%23g)' stroke-width='6'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23ff4fd8'/%3E%3C/svg%3E">
+<meta property="og:title" content="Touch-JEPA">
+<meta property="og:description" content="Tactile Representation Learning from Hand-Object Video with Limited Tactile Supervision.">
+<meta property="og:image" content="media/method_overview_v2.jpg">
+<style>img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Touch-JEPA</title>
+<meta name="description" content="Touch-JEPA: Tactile Representation Learning from Hand-Object Video with Limited Tactile Supervision.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #05070f;
+  --bg2: #0a0e1d;
+  --panel: #0d1226;
+  --panel-hi: #131a35;
+  --line: #1e2748;
+  --line-hi: #2d3a6b;
+  --fg: #e8ebf7;
+  --muted: #8d96b8;
+  --faint: #5a6487;
+  --neon: #ff4fd8;
+  --violet: #7b6cff;
+  --peak: #ffe9a8;
+  --c-gt: #ffffff;
+  --c-joint: #2fe0a0;
+  --c-ssl: #5aa2ff;
+  --c-hope: #ffb547;
+  --c-pf: #c98bff;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body { margin: 0; color: var(--fg); font: 15px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1280px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 64px; }
+@media (max-width: 600px) { .wrap { padding-inline: 16px; padding-block: 20px 48px; } }
+
+.kicker { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--violet); display: flex; gap: .6rem; align-items: center; }
+.kicker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--neon); box-shadow: 0 0 10px var(--neon); }
+h1 { font-weight: 700; font-size: clamp(1.7rem, 3.4vw, 2.6rem); line-height: 1.12; letter-spacing: -.02em; margin: .55rem 0 .4rem; text-wrap: balance; }
+h1 .grad { background: linear-gradient(90deg, #6f7dff 0%, #c25bff 45%, #ff4fd8 75%, #ffe9a8 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lede { color: var(--muted); max-width: 70ch; margin: 0; text-wrap: pretty; }
+header.paper { text-align: center; padding-block: 18px 6px; }
+header.paper .title { font-weight: 700; font-size: clamp(2.8rem, 6.2vw, 4.6rem); line-height: 1.05; letter-spacing: -.025em; margin: 0 0 .55rem; }
+header.paper .title .grad { background: linear-gradient(90deg, #6f7dff, #c25bff, #ff4fd8, #ffe9a8, #ff4fd8, #c25bff, #6f7dff); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: tj-shimmer 7s ease-in-out infinite alternate; }
+@keyframes tj-shimmer { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+@media (prefers-reduced-motion: reduce) { header.paper .title .grad { animation: none; } }
+header.paper .subtitle { font-size: clamp(1.2rem, 1.95vw, 1.85rem); font-weight: 500; letter-spacing: -.01em; color: var(--fg); max-width: 100%; margin: 0 auto .9rem; line-height: 1.32; text-wrap: balance; }
+@media (min-width: 1040px) { header.paper .subtitle { white-space: nowrap; width: max-content; max-width: calc(100vw - 32px); margin-left: 50%; transform: translateX(-50%); } }
+header.paper .authors { font-size: 1rem; color: var(--fg); margin: 0 0 .25rem; }
+header.paper .authors sup, header.paper .affil sup { color: var(--violet); font-size: .68em; margin-left: 1px; }
+header.paper .authors .sep { margin-right: .45em; }
+header.paper .authors a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s, color .15s; }
+header.paper .authors a:hover, header.paper .authors a:focus-visible { color: #ff9be9; border-bottom-color: currentColor; }
+header.paper .affil { font-size: .9rem; color: var(--muted); margin: 0; }
+header.paper .affil .gap { display: inline-block; width: 1.4em; }
+
+.picker { margin-top: 22px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.row-label { font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.tab { font: 500 13px/1 var(--sans); color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 7px 13px; cursor: pointer; }
+.tab[aria-pressed="true"] { color: var(--fg); border-color: var(--line-hi); background: var(--panel-hi); }
+.thumbs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; max-width: 100%; }
+.thumb { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 3px 13px 3px 3px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); cursor: pointer; color: inherit; text-align: left; }
+.thumb img { display: block; width: 30px; height: 30px; border-radius: 50%; object-fit: cover; opacity: .82; transition: opacity .15s; }
+.thumb span { display: block; font: 500 11.5px/1 var(--mono); color: var(--muted); white-space: nowrap; max-width: 18ch; overflow: hidden; text-overflow: ellipsis; }
+.thumb:hover img { opacity: 1; }
+.thumb[aria-pressed="true"] { border-color: var(--neon); box-shadow: 0 0 0 1px var(--neon), 0 0 14px -4px var(--neon); }
+.thumb[aria-pressed="true"] span { color: var(--fg); }
+.thumb[aria-pressed="true"] img { opacity: 1; }
+
+.controls { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-end; }
+.ctl { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--bg2); }
+.seg button { font: 500 13px/1 var(--sans); color: var(--muted); background: transparent; border: 0; border-right: 1px solid var(--line); padding: 9px 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; }
+.seg button:last-child { border-right: 0; }
+.seg button .sw { width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); opacity: .9; }
+.seg button[aria-pressed="true"] { color: var(--fg); background: var(--panel-hi); }
+.seg button:disabled { opacity: .4; cursor: default; }
+
+.stage { margin-top: 18px; display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.stage.all { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.stage.all .panel.video { grid-column: span 2; grid-row: span 2; }
+@media (max-width: 860px) { .stage { grid-template-columns: repeat(2, minmax(0, 1fr)); } .stage.all { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .stage, .stage.all { grid-template-columns: minmax(0, 1fr); } .stage.all .panel.video { grid-column: auto; grid-row: auto; } }
+.panel { position: relative; background: radial-gradient(120% 90% at 50% 35%, #111a3a 0%, var(--panel) 55%, #080b18 100%); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; aspect-ratio: 1; min-width: 0; }
+.panel canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; display: block; touch-action: none; }
+.panel .tag { position: absolute; left: 10px; top: 10px; z-index: 2; font: 600 12px/1 var(--sans); color: var(--fg); background: rgba(5,7,15,.62); backdrop-filter: blur(6px); border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px 6px 8px; display: inline-flex; align-items: center; gap: 7px; }
+.panel .tag .sw { width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); }
+.panel .corner { position: absolute; right: 10px; bottom: 9px; z-index: 2; font: 500 11px/1 var(--mono); color: var(--faint); }
+.panel.video img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.stage.sensor .panel:not(.video) { background: radial-gradient(120% 90% at 50% 35%, #e9f8ff 0%, #bfe8fb 55%, #8fd0ee 100%); border-color: #3b5f86; }
+.stage.sensor .panel:not(.video) .tag { background: rgba(5,7,15,.72); }
+.panel.video .fade { opacity: 0; }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; font: 500 12px/1 var(--mono); color: var(--muted); z-index: 3; background: rgba(5,7,15,.55); }
+
+.transport { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.btn { font: 600 13px/1 var(--sans); color: var(--fg); background: var(--panel-hi); border: 1px solid var(--line-hi); border-radius: 9px; padding: 9px 13px; cursor: pointer; display: inline-flex; gap: 7px; align-items: center; }
+.btn.play { min-width: 92px; justify-content: center; }
+.scrub { flex: 1 1 260px; display: flex; align-items: center; gap: 10px; min-width: 0; }
+.scrub input[type=range] { flex: 1; min-width: 0; accent-color: var(--neon); }
+.fnum { font: 500 12px/1 var(--mono); color: var(--muted); min-width: 64px; text-align: right; font-variant-numeric: tabular-nums; }
+.small-seg button { padding: 7px 10px; font-size: 12px; }
+label.chk { font: 500 12.5px/1 var(--sans); color: var(--muted); display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+label.chk input { accent-color: var(--neon); }
+
+.lower { margin-top: 14px; display: grid; gap: 12px; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: stretch; }
+.lower .card { padding: 10px 14px; display: flex; flex-direction: column; justify-content: center; }
+.intro-video { margin: 42px auto 34px; max-width: 1120px; }
+.intro-video .vfig { margin: 0; background: #ffffff; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 40px -18px rgba(123,108,255,.45); }
+.intro-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #ffffff; }
+.method { margin: 64px auto 8px; max-width: 1120px; }
+.method h2 { text-align: center; font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 700; letter-spacing: -.01em; margin: 0 0 18px; }
+.mfig { margin: 0; background: #ffffff; border-radius: 14px; padding: clamp(8px, 1.6vw, 18px); box-shadow: 0 10px 40px -18px rgba(123,108,255,.45); }
+.mfig img { display: block; width: 100%; height: auto; }
+.mcap { max-width: 760px; margin: 16px auto 0; color: var(--muted); font-size: .95rem; line-height: 1.7; text-align: justify; -webkit-hyphens: auto; hyphens: auto; }
+.mcap b { color: var(--fg); }
+.robot { margin: 64px auto 8px; max-width: 1120px; }
+.robot h2 { text-align: center; font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 700; letter-spacing: -.01em; margin: 0 0 10px; }
+.robot h3 { text-align: center; font-size: clamp(1.1rem, 1.9vw, 1.35rem); font-weight: 650; margin: 44px 0 12px; }
+.rlede { max-width: 760px; margin: 0 auto 16px; color: var(--muted); text-align: center; text-wrap: balance; }
+.rtabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 14px; }
+.rfig { margin: 0; background: #ffffff; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 40px -18px rgba(123,108,255,.45); }
+.rfig video { display: block; width: 100%; height: auto; aspect-ratio: 1440 / 924; background: #ffffff; }
+.rfig.energy video { aspect-ratio: 1440 / 760; }
+.rcap { max-width: 760px; margin: 12px auto 0; color: var(--muted); font-size: .95rem; line-height: 1.6; text-align: center; text-wrap: pretty; }
+.rcap b { color: var(--fg); font-weight: 600; }
+.rcap .n { font-variant-numeric: tabular-nums; }
+.overview { margin: 56px auto 8px; max-width: 760px; }
+.overview h2 { text-align: center; font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 700; letter-spacing: -.01em; margin: 0 0 18px; text-wrap: balance; }
+.overview p { margin: 0; color: #cfd5ea; font-size: 1.02rem; line-height: 1.75; text-align: justify; text-justify: inter-word; -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 7 3 3; }
+.lower .headrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+.lower .headrow h3 { margin: 0; }
+.lower .headrow .legend-line { margin-top: 0; }
+.lower .cscale h3 { margin-bottom: 8px; }
+@media (max-width: 860px) { .lower { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.card h3 { margin: 0 0 8px; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.chart svg { width: 100%; height: 56px; display: block; overflow: visible; }
+.legend-line { display: flex; flex-wrap: wrap; gap: 6px 14px; font: 500 12px/1.2 var(--sans); color: var(--muted); margin-top: 8px; }
+.legend-line i { display: inline-block; width: 14px; height: 2px; background: var(--c); vertical-align: middle; margin-right: 6px; box-shadow: 0 0 6px var(--c); }
+.cbar { height: 12px; border-radius: 6px; border: 1px solid var(--line); }
+.cbar-labels { display: flex; justify-content: space-between; font: 500 11px/1.3 var(--mono); color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
+.meta { font: 500 12.5px/1.6 var(--sans); color: var(--muted); margin-top: 12px; }
+.meta b { color: var(--fg); font-weight: 600; }
+.foot { margin-top: 22px; color: var(--faint); font-size: 12.5px; max-width: 90ch; }
+.kbd { font: 500 11px/1 var(--mono); border: 1px solid var(--line-hi); border-bottom-width: 2px; border-radius: 5px; padding: 2px 5px; color: var(--muted); }
+.err { color: #ff8a8a; font: 500 13px/1.4 var(--mono); }
+
+.navchips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 18px 0 0; }
+.navchips a { font: 500 13px/1 var(--sans); color: var(--fg); text-decoration: none; border: 1px solid var(--line-hi); background: var(--panel); border-radius: 999px; padding: 8px 14px; transition: border-color .15s, box-shadow .15s; }
+.navchips a:hover, .navchips a:focus-visible { border-color: var(--neon); box-shadow: 0 0 14px -4px var(--neon); }
+.navchips a.primary { background: linear-gradient(90deg, #6f7dff, #c25bff 55%, #ff4fd8); border-color: transparent; color: #fff; font-weight: 600; }
+.sec { margin: 72px auto 8px; max-width: 1120px; }
+.sec > h2 { text-align: center; font-size: clamp(1.5rem, 2.8vw, 2.1rem); font-weight: 700; letter-spacing: -.01em; margin: 0 0 10px; text-wrap: balance; }
+.sec > .hint { text-align: center; margin: -2px 0 0; color: var(--faint); font: 500 13px/1.4 var(--mono); letter-spacing: .02em; }
+.sec > .lede { max-width: 780px; margin: 0 auto 26px; color: var(--muted); text-align: center; text-wrap: pretty; font-size: 1.02rem; }
+.sec h3 { font-size: clamp(1.12rem, 1.9vw, 1.38rem); font-weight: 650; margin: 40px 0 6px; letter-spacing: -.005em; }
+.sec h3 .tag3 { font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--violet); margin-left: 10px; vertical-align: middle; }
+.sec .sub { color: var(--muted); margin: 0 0 14px; max-width: 90ch; }
+.tcard { background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; padding: 6px 6px 4px; }
+.tscroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.bench { width: 100%; min-width: 760px; border-collapse: separate; border-spacing: 0; font-variant-numeric: tabular-nums; font-size: .95rem; }
+table.bench th, table.bench td { padding: 9px 10px; text-align: center; white-space: nowrap; }
+table.bench thead th { color: var(--muted); font-weight: 500; font-size: .85rem; border-bottom: 1px solid var(--line); }
+table.bench thead tr.ds th { color: var(--fg); font-weight: 650; font-size: .95rem; border-bottom: 0; padding-bottom: 2px; }
+table.bench thead tr.ds th.grp { border-bottom: 2px solid var(--line-hi); }
+table.bench th.m, table.bench td.m { text-align: left; padding-left: 14px; }
+table.bench td { border-bottom: 1px solid rgba(30,39,72,.55); }
+table.bench td.gap, table.bench th.gap { width: 10px; padding: 0; border: 0; }
+table.bench tr.ours td.m { font-weight: 700; }
+table.bench tr.ours td { background: rgba(123,108,255,.07); }
+table.bench tr.ours.joint td.m { color: #ff9be9; }
+table.bench tr.sep td { border-top: 1px solid var(--line-hi); }
+table.bench tr.ref td { color: var(--faint); font-style: italic; border-bottom: 0; }
+table.bench td span { display: inline-block; min-width: 4.2em; padding: 3px 7px; border-radius: 7px; }
+table.bench .r1 { background: rgba(255,79,216,.26); color: #fff; font-weight: 700; box-shadow: 0 0 14px -6px rgba(255,79,216,.9); }
+table.bench .r2 { background: rgba(123,108,255,.26); color: #fff; font-weight: 600; }
+table.bench .r3 { background: rgba(90,162,255,.12); color: var(--fg); }
+.rk { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: flex-end; padding: 8px 12px 6px; font: 500 12px/1 var(--mono); color: var(--muted); }
+.rk i { display: inline-block; width: 18px; height: 11px; border-radius: 4px; margin-right: 6px; vertical-align: -1px; }
+.find { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; }
+.find li { position: relative; padding-left: 26px; color: #cfd5ea; line-height: 1.6; }
+.find li::before { content: attr(data-n); position: absolute; left: 0; top: 2px; width: 18px; height: 18px; border-radius: 50%; background: var(--panel-hi); border: 1px solid var(--line-hi); color: var(--neon); font: 600 11px/18px var(--mono); text-align: center; }
+.find b { color: var(--fg); }
+.metricnote { color: var(--faint); font-size: .85rem; margin: 10px 0 0; line-height: 1.55; }
+.two { display: grid; gap: 22px; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: center; }
+@media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.wfig { margin: 0; background: #fff; border-radius: 14px; padding: 12px; box-shadow: 0 10px 40px -18px rgba(123,108,255,.45); }
+.wfig img { display: block; width: 100%; height: auto; }
+.cem { display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 16px 0 6px; }
+@media (max-width: 820px) { .cem { grid-template-columns: minmax(0, 1fr); } }
+.cem .st { background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; padding: 16px; min-width: 0; }
+.cem .st .n { font: 600 12px/1 var(--mono); color: var(--neon); letter-spacing: .1em; text-transform: uppercase; }
+.cem .st h4 { margin: 8px 0 6px; font-size: 1.05rem; }
+.cem .st p { margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.55; }
+.cem svg { display: block; width: 100%; height: 92px; margin: 4px 0 8px; }
+.energy-eq { text-align: center; margin: 18px auto 6px; font: 500 1.15rem/1.4 "Times New Roman", Times, serif; color: var(--fg); }
+.energy-eq .lbl { display: block; font: 500 12px/1.4 var(--mono); color: var(--muted); letter-spacing: .04em; margin-top: 6px; }
+.succ { display: grid; gap: 10px; margin: 8px 0 0; }
+.succ .row { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 12px; align-items: center; }
+.succ .task { font-weight: 600; text-align: right; }
+.succ .bars { display: grid; gap: 4px; min-width: 0; }
+.succ .bar { position: relative; height: 18px; border-radius: 6px; background: rgba(30,39,72,.55); overflow: hidden; }
+.succ .bar i { position: absolute; inset: 0 auto 0 0; border-radius: 6px; }
+.succ .bar b { position: absolute; right: 8px; top: 0; font: 600 12px/18px var(--mono); color: var(--fg); }
+.succ .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: center; font: 500 12.5px/1 var(--sans); color: var(--muted); margin-top: 8px; }
+.succ .legend i { display: inline-block; width: 14px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+section[id] { scroll-margin-top: 24px; }
+.links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 22px 0 0; }
+.lbtn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px 9px 13px; border-radius: 999px; background: linear-gradient(90deg, #6f7dff, #c25bff 55%, #ff4fd8); border: 1px solid transparent; color: #fff; font: 600 13px/1 var(--sans); text-decoration: none; transition: box-shadow .15s, transform .15s; }
+.lbtn svg { width: 15px; height: 15px; flex: none; }
+a.lbtn:hover, a.lbtn:focus-visible { box-shadow: 0 0 16px -4px var(--neon); transform: translateY(-1px); }
+.lbtn.soon { cursor: default; }
+.sidenav { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); z-index: 20; display: flex; flex-direction: column; gap: 2px; padding: 8px; border-radius: 14px;
+  background: linear-gradient(160deg, rgba(111,125,255,.16), rgba(194,91,255,.12) 55%, rgba(255,79,216,.14)); border: 1px solid rgba(160,140,255,.28);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 8px 30px -14px rgba(123,108,255,.6); }
+.sidenav a { display: flex; align-items: center; gap: 8px; padding: 6px 10px 6px 8px; border-radius: 9px; color: rgba(232,235,247,.72); text-decoration: none; font: 500 12.5px/1 var(--sans); transition: background .15s, color .15s; }
+.sidenav a i { width: 7px; height: 7px; border-radius: 50%; background: rgba(160,150,255,.55); flex: none; transition: background .15s, box-shadow .15s; }
+.sidenav a:hover, .sidenav a:focus-visible { color: #fff; background: rgba(123,108,255,.18); }
+.sidenav a.on { color: #fff; background: linear-gradient(90deg, rgba(111,125,255,.32), rgba(255,79,216,.28)); }
+.sidenav a.on i { background: #ff4fd8; box-shadow: 0 0 8px #ff4fd8; }
+@media (max-width: 1460px) { .sidenav a span { display: none; } .sidenav a { padding: 7px; } }
+@media (max-width: 640px) { .sidenav { display: none; } }
+.samples { display: grid; gap: 18px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 14px; }
+@media (max-width: 760px) { .samples { grid-template-columns: minmax(0, 1fr); } }
+.samples figure { margin: 0; background: #fff; border-radius: 14px; padding: 12px 12px 10px; box-shadow: 0 10px 40px -18px rgba(123,108,255,.45); min-width: 0; }
+.samples img { display: block; width: 100%; height: auto; }
+.samples figcaption { margin-top: 8px; text-align: center; color: #3a3a3a; font: 600 13.5px/1.3 var(--sans); }
+.samples figcaption span { color: #777; font-weight: 500; }
+</style>
+</head>
+<body>
+<nav class="sidenav" aria-label="Sections">
+  <a href="#video" data-sec="video"><i></i><span>Video</span></a>
+  <a href="#explore" data-sec="explore"><i></i><span>Interactive</span></a>
+  <a href="#abstract" data-sec="abstract"><i></i><span>Abstract</span></a>
+  <a href="#method" data-sec="method"><i></i><span>Method</span></a>
+  <a href="#benchmark" data-sec="benchmark"><i></i><span>Benchmark</span></a>
+  <a href="#robot" data-sec="robot"><i></i><span>Robot</span></a>
+</nav>
+<div class="wrap">
+  <header class="paper">
+    <h1 class="title"><span class="grad">Touch-JEPA</span></h1>
+    <p class="subtitle">Tactile Representation Learning from Hand‑Object Video with Limited Tactile Supervision</p>
+    <p class="authors"><a href="https://mnseong.github.io/" target="_blank" rel="noopener">Minseong Kweon</a><sup>1,2</sup><span class="sep">,</span> <a href="https://fengq1a0.github.io/" target="_blank" rel="noopener">Qiao Feng</a><sup>2</sup><span class="sep">,</span> <a href="https://yh2371.github.io/" target="_blank" rel="noopener">Yiming Huang</a><sup>2</sup><span class="sep">,</span> <a href="https://lingjie0206.github.io/" target="_blank" rel="noopener">Lingjie Liu</a><sup>2</sup></p>
+    <p class="affil"><sup>1</sup>University of Minnesota <span class="gap"></span> <sup>2</sup>University of Pennsylvania</p>
+    <div class="links">
+      <span class="lbtn soon" title="Coming soon" aria-disabled="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V9h5.5L13 3.5zM7.5 13v5h1.3v-1.6h.8c1.1 0 1.9-.6 1.9-1.7S10.7 13 9.6 13H7.5zm1.3 1.1h.7c.4 0 .7.2.7.6s-.3.6-.7.6h-.7v-1.2zm3.3-1.1v5h1.8c1.5 0 2.4-.9 2.4-2.5s-.9-2.5-2.4-2.5h-1.8zm1.3 1.1h.4c.8 0 1.2.5 1.2 1.4s-.4 1.4-1.2 1.4h-.4v-2.8zM17 13v5h1.3v-2h1.6v-1h-1.6v-.9H20V13h-3z"/></svg><span>Paper</span></span>
+      <span class="lbtn soon" title="Coming soon" aria-disabled="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M5 4l14 16M19 4l-5.6 6.4M10.6 13.6L5 20"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></svg><span>arXiv</span></span>
+      <span class="lbtn soon" title="Coming soon" aria-disabled="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>Code</span></span>
+    </div>
+  </header>
+
+  <section class="intro-video" id="video" lang="en" aria-label="Overview video">
+    <figure class="vfig"><video id="intro-video" src="media/video/touchjepa_overview.mp4" poster="media/video/touchjepa_overview_poster.jpg" muted loop playsinline controls preload="metadata" aria-label="Touch-JEPA in 30 seconds: motivation, masked prediction on hand-object video, the method, label efficiency, and a qualitative comparison with supervised baselines"></video></figure>
+  </section>
+
+  <section class="sec" id="explore" lang="en" aria-labelledby="ex-title" style="margin:48px auto 0">
+    <h2 id="ex-title">Interactive Visualization</h2>
+    <p class="hint">Scroll &amp; Zoom in/out!</p>
+  </section>
+  <section class="picker" aria-label="Clip">
+    <div class="tabs" id="laneTabs"></div>
+    <div class="thumbs" id="thumbs"></div>
+  </section>
+
+
+  <section class="stage" id="stage" aria-label="Viewer"></section>
+
+  <section class="transport" aria-label="Playback">
+    <button class="btn play" id="playBtn" type="button">❚❚ Pause</button>
+    <div class="scrub"><input type="range" id="scrub" min="0" max="15" step="0.01" value="0" aria-label="Frame"><span class="fnum" id="fnum">1 / 16</span></div>
+  </section>
+
+  <section class="lower">
+    <div class="card chart">
+      <div class="headrow"><h3>Per-frame total intensity</h3><div class="legend-line" id="chartLegend"></div></div>
+      <svg id="chart" viewBox="0 0 600 56" preserveAspectRatio="none" role="img" aria-label="Per-frame total intensity of the ground truth and the predictions"></svg>
+    </div>
+    <div class="card cscale">
+      <h3>Tactile intensity</h3>
+      <div class="cbar" id="cbar"></div>
+      <div class="cbar-labels"><span>none</span><span>high</span></div>
+      <div class="meta" id="meta"></div>
+    </div>
+  </section>
+
+
+  <section class="overview" id="abstract" lang="en" aria-labelledby="ov-title">
+    <h2 id="ov-title">Abstract</h2>
+    <p>Understanding contact and tactile magnitude in hand-object interaction is a key step toward physically intelligent systems, yet learning such representations is limited by the cost and restricted coverage of tactile measurements. We present Touch-JEPA, a framework for learning tactile representations from hand-object videos with limited tactile supervision. We first introduce a self-supervised pretraining objective that learns from video alone without tactile supervision. Using video-derived hand geometry, Touch-JEPA predicts masked visual features at corresponding hand-surface locations from spatial and temporal context, encouraging the representation to capture latent contact dynamics. We then extend this formulation to joint representation learning, where masked prediction is applied to all videos while tactile supervision is available only for a labeled subset, grounding the shared representation in measured contact and magnitude. With self-supervised pretraining alone, simple supervised readouts on frozen Touch-JEPA features outperform supervised baselines in contact discrimination and tactile magnitude estimation across three human-hand benchmarks, and transfer to robotic hands without robot tactile training data. Joint learning with limited tactile supervision further improves contact and magnitude estimation on the human-hand benchmarks. Together, these results show that hand-object video can provide scalable self-supervision for tactile representation learning, while limited tactile measurements provide complementary physical grounding.</p>
+  </section>
+
+  <section class="method" id="method" lang="en" aria-labelledby="mo-title">
+    <h2 id="mo-title">Method Overview</h2>
+    <figure class="mfig"><img src="media/method_overview_v2.jpg" width="2170" height="880" loading="lazy" alt="Touch-JEPA overview: a y-encoder reads unmasked video to produce target features at hand-surface locations; an x-encoder sees masked video plus the estimated hand mesh and predicts them; tactile labels supervise the same states when available."></figure>
+    <p class="mcap"><b>Touch-JEPA overview.</b> Given a human-object interaction video, the <i>y</i>-encoder processes unmasked RGB to produce target visual features at geometry-aligned hand-surface locations. The <i>x</i>-encoder combines masked RGB with estimated hand geometry to predict these targets. When tactile annotations are available, joint training additionally supervises contact and force-related predictions decoded from masked <i>x</i>-encoder states before the predictor, providing complementary physical grounding for the shared representation.</p>
+  </section>
+
+
+  <section class="sec" id="benchmark" lang="en" aria-labelledby="bm-title">
+    <h2 id="bm-title">Benchmark</h2>
+    <p class="lede">Three human-hand tactile benchmarks with different sensors, viewpoints and tasks: OpenTouch, PressureVision DB and HandSense. Our rows read touch from the learned representation and are compared with retrained supervised baselines.</p>
+
+    <h3 id="ce-title">Contact Estimation <span class="tag3">where and when is the hand touching?</span></h3>
+    <div class="tcard"><div class="tscroll"><table class="bench" aria-labelledby="ce-title">
+      <thead>
+        <tr class="ds"><th class="m"></th><th class="grp" colspan="3">OpenTouch</th><th class="gap"></th><th class="grp" colspan="3">PVDB</th><th class="gap"></th><th class="grp" colspan="3">HandSense</th></tr>
+        <tr><th class="m">Method</th><th>AUROC&nbsp;&uarr;</th><th>F1&nbsp;&uarr;</th><th>tAUC&nbsp;&uarr;</th><th class="gap"></th><th>AUROC&nbsp;&uarr;</th><th>F1&nbsp;&uarr;</th><th>tAUC&nbsp;&uarr;</th><th class="gap"></th><th>AUROC&nbsp;&uarr;</th><th>F1&nbsp;&uarr;</th><th>tAUC&nbsp;&uarr;</th></tr>
+      </thead>
+      <tbody>
+        <tr class=""><td class="m">PressureVision</td><td>0.676</td><td>0.364</td><td>0.506</td><td class="gap"></td><td>0.890</td><td>0.368</td><td><span class="r3">0.748</span></td><td class="gap"></td><td>0.734</td><td>0.672</td><td>0.588</td></tr>
+        <tr class=""><td class="m">PressureVision++</td><td>0.649</td><td>0.342</td><td>0.513</td><td class="gap"></td><td>0.743</td><td>0.179</td><td>0.654</td><td class="gap"></td><td>0.680</td><td>0.636</td><td>0.560</td></tr>
+        <tr class=""><td class="m">PressureFormer</td><td><span class="r3">0.785</span></td><td><span class="r3">0.492</span></td><td><span class="r2">0.534</span></td><td class="gap"></td><td><span class="r3">0.920</span></td><td>0.257</td><td>0.744</td><td class="gap"></td><td>0.811</td><td><span class="r3">0.751</span></td><td><span class="r3">0.695</span></td></tr>
+        <tr class=""><td class="m">HOPE</td><td>0.762</td><td>0.471</td><td>0.517</td><td class="gap"></td><td>0.911</td><td><span class="r3">0.391</span></td><td>0.705</td><td class="gap"></td><td><span class="r3">0.844</span></td><td>0.715</td><td>0.609</td></tr>
+        <tr class="ours sep"><td class="m">Ours (SSL)</td><td><span class="r2">0.836</span></td><td><span class="r2">0.549</span></td><td><span class="r3">0.527</span></td><td class="gap"></td><td><span class="r2">0.925</span></td><td><span class="r2">0.475</span></td><td><span class="r2">0.783</span></td><td class="gap"></td><td><span class="r2">0.914</span></td><td><span class="r2">0.826</span></td><td><span class="r2">0.699</span></td></tr>
+        <tr class="ours joint"><td class="m">Ours (joint)</td><td><span class="r1">0.862</span></td><td><span class="r1">0.582</span></td><td><span class="r1">0.540</span></td><td class="gap"></td><td><span class="r1">0.949</span></td><td><span class="r1">0.553</span></td><td><span class="r1">0.802</span></td><td class="gap"></td><td><span class="r1">0.941</span></td><td><span class="r1">0.861</span></td><td><span class="r1">0.752</span></td></tr>
+        <tr class="ref sep"><td class="m">Static prior</td><td>0.832</td><td>0.542</td><td>0.500</td><td class="gap"></td><td>0.819</td><td>0.335</td><td>0.500</td><td class="gap"></td><td>0.559</td><td>0.618</td><td>0.500</td></tr>
+      </tbody>
+    </table></div>
+    <div class="rk"><span><i style="background:rgba(255,79,216,.45)"></i>1st</span><span><i style="background:rgba(123,108,255,.45)"></i>2nd</span><span><i style="background:rgba(90,162,255,.25)"></i>3rd</span><span>among learned methods</span></div></div>
+    <ol class="find">
+      <li data-n="1"><b>Ours (joint) is best in all nine columns</b>, across three sensors, viewpoints and tasks.</li>
+      <li data-n="2"><b>Self-supervision alone already beats supervised baselines:</b> Ours (SSL) exceeds every retrained baseline in AUROC and F1 on all three datasets.</li>
+    </ol>
+
+    <h3 id="tm-title">Tactile Magnitude Estimation <span class="tag3">how hard is it pressing?</span></h3>
+    <div class="tcard"><div class="tscroll"><table class="bench" aria-labelledby="tm-title">
+      <thead>
+        <tr class="ds"><th class="m"></th><th class="grp" colspan="3">OpenTouch</th><th class="gap"></th><th class="grp" colspan="3">PVDB</th><th class="gap"></th><th class="grp" colspan="3">HandSense</th></tr>
+        <tr><th class="m">Method</th><th>nMAE&nbsp;&darr;</th><th>nRMSE&nbsp;&darr;</th><th>t-&rho;&nbsp;&uarr;</th><th class="gap"></th><th>nMAE&nbsp;&darr;</th><th>nRMSE&nbsp;&darr;</th><th>t-&rho;&nbsp;&uarr;</th><th class="gap"></th><th>nMAE&nbsp;&darr;</th><th>nRMSE&nbsp;&darr;</th><th>t-&rho;&nbsp;&uarr;</th></tr>
+      </thead>
+      <tbody>
+        <tr class=""><td class="m">PressureVision</td><td><span class="r3">0.363</span></td><td>1.099</td><td>&minus;0.005</td><td class="gap"></td><td><span class="r3">0.130</span></td><td><span class="r3">0.919</span></td><td><span class="r3">0.280</span></td><td class="gap"></td><td>0.738</td><td>1.210</td><td>0.036</td></tr>
+        <tr class=""><td class="m">PressureVision++</td><td>0.364</td><td>1.102</td><td>&minus;0.009</td><td class="gap"></td><td>0.136</td><td>0.967</td><td>0.155</td><td class="gap"></td><td>0.746</td><td>1.219</td><td>0.013</td></tr>
+        <tr class=""><td class="m">PressureFormer</td><td>0.364</td><td><span class="r3">0.939</span></td><td><span class="r3">0.091</span></td><td class="gap"></td><td>0.137</td><td>0.981</td><td>0.181</td><td class="gap"></td><td><span class="r3">0.590</span></td><td><span class="r3">0.914</span></td><td><span class="r3">0.111</span></td></tr>
+        <tr class=""><td class="m">HOPE</td><td>0.366</td><td>0.974</td><td>0.056</td><td class="gap"></td><td>0.130</td><td>0.951</td><td>0.195</td><td class="gap"></td><td>0.614</td><td>0.922</td><td>0.096</td></tr>
+        <tr class="ours sep"><td class="m">Ours (SSL)</td><td><span class="r2">0.326</span></td><td><span class="r2">0.914</span></td><td><span class="r1">0.159</span></td><td class="gap"></td><td><span class="r2">0.129</span></td><td><span class="r2">0.893</span></td><td><span class="r1">0.466</span></td><td class="gap"></td><td><span class="r2">0.495</span></td><td><span class="r2">0.781</span></td><td><span class="r2">0.162</span></td></tr>
+        <tr class="ours joint"><td class="m">Ours (joint)</td><td><span class="r1">0.314</span></td><td><span class="r1">0.879</span></td><td><span class="r2">0.142</span></td><td class="gap"></td><td><span class="r1">0.123</span></td><td><span class="r1">0.872</span></td><td><span class="r2">0.458</span></td><td class="gap"></td><td><span class="r1">0.461</span></td><td><span class="r1">0.740</span></td><td><span class="r1">0.245</span></td></tr>
+        <tr class="ref sep"><td class="m">Static prior</td><td>0.398</td><td>0.898</td><td>N/A</td><td class="gap"></td><td>0.221</td><td>0.955</td><td>N/A</td><td class="gap"></td><td>0.755</td><td>1.047</td><td>N/A</td></tr>
+      </tbody>
+    </table></div>
+    <div class="rk"><span><i style="background:rgba(255,79,216,.45)"></i>1st</span><span><i style="background:rgba(123,108,255,.45)"></i>2nd</span><span><i style="background:rgba(90,162,255,.25)"></i>3rd</span><span>among learned methods</span></div></div>
+    <ol class="find">
+      <li data-n="1"><b>One of our two models is best in every column.</b></li>
+      <li data-n="2"><b>Ours (SSL) surpasses every supervised baseline in nMAE and nRMSE</b> on all three datasets, and our models also lead the temporal rank agreement (t-&rho;) on every dataset.</li>
+    </ol>
+    <p class="metricnote">AUROC and F1: per-entry contact; tAUC: contact over time. nMAE and nRMSE: magnitude error normalized per dataset; t-&rho;: rank correlation of the hand's summed magnitude over time within contact. Targets are nominal pressure for PVDB and uncalibrated sensor magnitudes for OpenTouch and HandSense. The static prior is a video-free per-channel reference and is not ranked.</p>
+
+
+    <h3 id="qs-title">Qualitative Comparison <span class="tag3">appendix examples</span></h3>
+    <p class="sub">Four test sequences from the appendix where the difference is easy to see. Every method is drawn on the same estimated hand mesh with the same color scale, at four frames of each sequence.</p>
+    <div class="samples">
+      <figure><img src="media/samples/handsense_piano.jpg" width="1034" height="1230" loading="lazy" alt="HandSense piano key press: the ground truth and Ours (joint) light up the pressing fingertip, while HOPE, PressureFormer and PressureVision++ stay dark."><figcaption>HandSense <span>&middot; piano key press</span></figcaption></figure>
+      <figure><img src="media/samples/opentouch_office.jpg" width="1034" height="1230" loading="lazy" alt="OpenTouch office: Ours (joint) matches the thumb and finger contact of the ground truth, HOPE spreads activation over the whole palm, PressureVision++ predicts nothing."><figcaption>OpenTouch <span>&middot; office</span></figcaption></figure>
+      <figure><img src="media/samples/pvdb_palm_and_fingers.jpg" width="1034" height="1230" loading="lazy" alt="PressureVision DB palm-and-finger press: Ours (joint) follows the palm and fingertip pressure of the ground truth over time; the baselines miss most of it."><figcaption>PressureVision DB <span>&middot; palm-and-finger press</span></figcaption></figure>
+      <figure><img src="media/samples/pvdb_palm.jpg" width="1034" height="1230" loading="lazy" alt="PressureVision DB palm press: Ours (joint) reproduces the rise and fall of palm pressure; HOPE and PressureVision++ predict almost none."><figcaption>PressureVision DB <span>&middot; palm press</span></figcaption></figure>
+    </div>
+
+    <div class="two" style="margin-top:44px">
+      <div>
+        <h3 style="margin-top:0">Label Efficiency <span class="tag3">fewer tactile labels</span></h3>
+        <p class="sub">Contact AUROC averaged over the three test sets as the share of labeled sensor recordings drops from 100% to 1%. Joint training keeps the lead at every budget, and the gap to the supervised model widens as labels become scarce, reaching <b style="color:var(--fg)">+0.067</b> at 1%.</p>
+      </div>
+      <figure class="wfig"><img src="media/label_efficiency.png" width="828" height="530" loading="lazy" alt="Mean contact AUROC versus the share of labeled sensor recordings (100%, 10%, 3%, 1%) for Ours (joint), Ours (SSL), Two-stage and Supervised; Ours (joint) is highest at every budget."></figure>
+    </div>
+
+    <h3 id="zs-title">Zero-Shot Transfer to a Robot Hand <span class="tag3">no robot tactile data</span></h3>
+    <p class="sub">Applied without adaptation to 89 real Allegro-hand episodes, with no robot tactile data in training.</p>
+    <div class="tcard"><div class="tscroll"><table class="bench" style="min-width:520px" aria-labelledby="zs-title">
+      <thead><tr><th class="m">Method</th><th>AUROC&nbsp;&uarr;</th><th>AP&nbsp;&uarr;</th><th>F1&nbsp;&uarr;</th><th>&rho;&nbsp;&uarr;</th></tr></thead>
+      <tbody>
+        <tr><td class="m">PressureVision</td><td>0.506</td><td>0.443</td><td>0.474</td><td>&minus;0.032</td></tr>
+        <tr><td class="m">PressureVision++</td><td>0.435</td><td>0.395</td><td>0.429</td><td>&minus;0.039</td></tr>
+        <tr><td class="m">HOPE</td><td><span class="r3">0.582</span></td><td><span class="r3">0.510</span></td><td><span class="r3">0.535</span></td><td><span class="r2">0.159</span></td></tr>
+        <tr class="ours sep"><td class="m">Ours (SSL)</td><td><span class="r1">0.676</span></td><td><span class="r1">0.608</span></td><td><span class="r1">0.608</span></td><td><span class="r1">0.183</span></td></tr>
+        <tr class="ours joint"><td class="m">Ours (joint)</td><td><span class="r2">0.628</span></td><td><span class="r2">0.529</span></td><td><span class="r2">0.569</span></td><td><span class="r3">0.106</span></td></tr>
+      </tbody>
+    </table></div></div>
+  </section>
+
+  <section class="robot" id="robot" lang="en" aria-labelledby="rb-title">
+    <h2 id="rb-title">Robot Manipulation</h2>
+    <p class="rlede">Each video shows one fresh simulated scene with the same planner and task rule for both encoders: Ours (joint) succeeds and V-JEPA 2.1 (frozen) fails.</p>
+    <div class="rtabs" role="tablist" aria-label="Task">
+      <button class="tab" type="button" role="tab" data-task="grasp" aria-pressed="true">Grasp</button>
+      <button class="tab" type="button" role="tab" data-task="place" aria-pressed="false">Place</button>
+      <button class="tab" type="button" role="tab" data-task="reach" aria-pressed="false">Reach with object</button>
+    </div>
+    <figure class="rfig"><video id="rb-video" src="media/robot/robot_grasp_joint_vs_vjepa21.mp4" poster="media/robot/robot_grasp_joint_vs_vjepa21_poster.jpg" muted loop playsinline preload="metadata" aria-label="Grasp: Ours (joint) lifts and holds the cube; V-JEPA 2.1 (frozen) drops it"></video></figure>
+    <p class="rcap" id="rb-cap"></p>
+
+
+    <h3>Success on 50 fresh scenes</h3>
+    <div class="succ" id="succ" aria-label="Successes out of 50 fresh scenes per task"></div>
+    <p class="rcap">Same scenes, planner and task rule for every encoder; rules were chosen on separate development scenes before the final run.</p>
+
+
+    <h3>How Touch-JEPA-AC plans</h3>
+    <p class="rlede">Touch-JEPA-AC turns the frozen encoder into a world model for a simulated robot hand, following V-JEPA&nbsp;2-AC. An action-conditioned predictor, trained on robot trajectories, imagines what the scene and the hand surface will look like after a candidate move. The robot then plans in this learned space: at every decision it picks the move whose imagined outcome is closest to the next goal image, executes it, looks again, and replans.</p>
+    <p class="energy-eq">E(<b>a</b>) = |&thinsp;B&#770;(<b>a</b>) &minus; B<sup>&#9733;</sup>&thinsp;| + w&thinsp;|&thinsp;U&#770;(<b>a</b>) &minus; U<sup>&#9733;</sup>&thinsp;|<span class="lbl">energy of a move a: scene features B and hand-surface (touch) features U, predicted vs goal</span></p>
+    <figure class="rfig energy"><video id="rb-energy" src="media/robot/robot_energy_cem_convergence.mp4" poster="media/robot/robot_energy_cem_convergence_poster.jpg" muted loop playsinline preload="metadata" aria-label="3-D planner energy surfaces of V-JEPA 2.1 and Ours (joint) with CEM samples converging to the energy minimum"></video></figure>
+    <p class="rcap">CEM, the cross-entropy method, searches over moves by sampling. It draws 400 candidate moves, scores each with the predictor, keeps the 10 with the lowest energy (orange) and refits its sampling distribution to them, ten times, and the robot executes the final mean. Shown for a Grasp decision with the same input frames for both encoders, over the (&Delta;x, &Delta;z) plane through the demonstrated move: Ours (joint) forms a narrow well whose minimum lies <b class="n">0.3 cm</b> from the demonstrated move, while the minimum for V-JEPA 2.1 (frozen) lies <b class="n">1.4 cm</b> away.</p>
+  </section>
+  <script>
+  (() => {
+    const T = {
+      grasp: { label: 'Grasp', ours: 33, vj: 18, alt: 'Grasp: Ours (joint) lifts and holds the cube; V-JEPA 2.1 (frozen) drops it' },
+      place: { label: 'Place', ours: 29, vj: 17, alt: 'Place: Ours (joint) places the cube on the target; V-JEPA 2.1 (frozen) drops it' },
+      reach: { label: 'Reach with object', ours: 20, vj: 7, alt: 'Reach with object: Ours (joint) carries the cube to the target; V-JEPA 2.1 (frozen) drops it' },
+    };
+    const S = [['Grasp', 18, 26, 33], ['Place', 17, 25, 29], ['Reach with object', 7, 16, 20]], C = ['#5a6487', '#F4A259', '#E2601B'], N = ['V-JEPA 2.1 (frozen)', 'Ours (SSL)', 'Ours (joint)'];
+    document.getElementById('succ').innerHTML = S.map(([t, ...v]) => `<div class="row"><div class="task">${t}</div><div class="bars">${v.map((k, i) => `<div class="bar" title="${N[i]}: ${k} / 50"><i style="width:${2 * k}%;background:${C[i]}"></i><b>${k}</b></div>`).join('')}</div></div>`).join('')
+      + `<div class="legend">${N.map((n, i) => `<span><i style="background:${C[i]}"></i>${n}</span>`).join('')}</div>`;
+    const vid = document.getElementById('rb-video'), cap = document.getElementById('rb-cap'), tabs = document.querySelectorAll('.rtabs .tab');
+    const show = (k) => {
+      const t = T[k];
+      tabs.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.task === k)));
+      vid.poster = `media/robot/robot_${k}_joint_vs_vjepa21_poster.jpg`; vid.src = `media/robot/robot_${k}_joint_vs_vjepa21.mp4`; vid.setAttribute('aria-label', t.alt);
+      cap.innerHTML = `<b>${t.label}</b>, successes on 50 fresh scenes: <b class="n">Ours (joint) ${t.ours}</b> vs <span class="n">V-JEPA 2.1 (frozen) ${t.vj}</span>.`;
+      if (vid.dataset.visible === '1') vid.play().catch(() => {});
+    };
+    tabs.forEach(b => b.addEventListener('click', () => show(b.dataset.task)));
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      e.target.dataset.visible = e.isIntersecting ? '1' : '0';
+      if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause();
+    }), { threshold: 0.25 });
+    [vid, document.getElementById('rb-energy'), document.getElementById('intro-video')].forEach(v => io.observe(v));
+    show('grasp');
+  })();
+  </script>
+
+</div>
+
+<script>
+(() => {
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('a[href^="#"]').forEach((a) => a.addEventListener('click', (e) => {
+    const t = document.getElementById(a.getAttribute('href').slice(1)); if (!t) return;
+    e.preventDefault(); t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }));
+  const links = [...document.querySelectorAll('.sidenav a')], secs = links.map((a) => document.getElementById(a.dataset.sec)).filter(Boolean);
+  const mark = () => {
+    const y = window.innerHeight * 0.35; let cur = secs[0];
+    for (const sct of secs) if (sct.getBoundingClientRect().top <= y) cur = sct;
+    links.forEach((a) => a.classList.toggle('on', a.dataset.sec === cur.id));
+  };
+  window.addEventListener('scroll', mark, { passive: true }); window.addEventListener('resize', mark); mark();
+})();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(() => {
+  const METHOD_COLORS = { gt: '#ffffff', ours_joint: '#2fe0a0', hope: '#ffb547', pf: '#c98bff' };
+  const COMPARE = ['ours_joint'];
+  const LANES = ['OpenTouch', 'PVDB', 'HandSense'];
+  const state = { index: null, clip: null, cache: {}, lane: 'OpenTouch', method: 'ours_joint', layout: 'pair', style: 'sensor', playing: true, speed: 2, t: 0, smooth: true };
+  const $ = (id) => document.getElementById(id);
+  let FACES = null, FACES_FLIP = null, REGION = null, LUT = null, GREY = [0.62, 0.62, 0.62], BLEND = 0.3, TEMPLATE = null, NB_PTR = null, NB_IDX = null, TEMPLATE_R = 1;
+
+  const b64bytes = (s) => { const bin = atob(s); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; };
+  const prettySlug = (lane, slug) => {
+    const t = slug.split('_').filter((w) => !/^\d+$/.test(w) && !/^[0-9a-f]{8}$/.test(w) && !/^rec\d+$/.test(w) && !/^p\d$/.test(w));
+    if (lane === 'PVDB') return t.filter((w) => !/^\d{4}$/.test(w) && !/^(x\d+|\d+x)$/.test(w) && !/^(left|right)$/.test(w)).join(' ').replace(/-/g, ' ').replace('onebyone', 'one by one');
+    if (lane === 'HandSense') return t.filter((w) => w.length > 5 || !/^[a-z]{5}$/.test(w)).join(' ').replace(/-/g, ' ');
+    return t.join(' ').replace(/-/g, ' ').replace(/\bml\b/, '').replace(/\btj\b/, '').trim();
+  };
+
+  async function loadIndex() {
+    const r = await fetch('data/index.json'); if (!r.ok) throw new Error('index.json ' + r.status);
+    const idx = await r.json(); state.index = idx;
+    FACES = new Uint16Array(b64bytes(idx.faces).buffer); FACES_FLIP = new Uint16Array(FACES.length); for (let f = 0; f < FACES.length; f += 3) { FACES_FLIP[f] = FACES[f]; FACES_FLIP[f + 1] = FACES[f + 2]; FACES_FLIP[f + 2] = FACES[f + 1]; } const lin = (v) => (v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
+    LUT = idx.lut.map((c) => c.map((v) => lin(v / 255))); GREY = idx.grey.map(lin); BLEND = idx.blend;
+    if (idx.region) REGION = b64bytes(idx.region);
+    if (idx.template) { const tf = new Float32Array(b64bytes(idx.template).buffer); TEMPLATE = new Float32Array(tf.length);
+      TEMPLATE_R = 0; for (let i = 0; i < tf.length; i += 3) { TEMPLATE[i] = tf[i]; TEMPLATE[i + 1] = tf[i + 1]; TEMPLATE[i + 2] = tf[i + 2]; TEMPLATE_R = Math.max(TEMPLATE_R, Math.hypot(tf[i], tf[i + 1], tf[i + 2])); } }
+    { const nb = Array.from({ length: 778 }, () => new Set()); for (let f = 0; f < FACES.length; f += 3) { const a = FACES[f], b = FACES[f + 1], c = FACES[f + 2]; nb[a].add(b); nb[a].add(c); nb[b].add(a); nb[b].add(c); nb[c].add(a); nb[c].add(b); }
+      NB_PTR = new Uint32Array(779); let n = 0; for (let i = 0; i < 778; i++) { NB_PTR[i] = n; n += nb[i].size; } NB_PTR[778] = n; NB_IDX = new Uint16Array(n); let k = 0; for (let i = 0; i < 778; i++) for (const j of nb[i]) NB_IDX[k++] = j; }
+    $('cbar').style.background = 'linear-gradient(90deg,' + idx.lut.filter((_, i) => i % 16 === 0 || i === 255).map((c, i, a) => `rgb(${c[0]},${c[1]},${c[2]}) ${(100 * i / (a.length - 1)).toFixed(1)}%`).join(',') + ')';
+    return idx;
+  }
+  async function loadClip(id) {
+    if (state.cache[id]) return state.cache[id];
+    const r = await fetch('data/' + id + '.json'); if (!r.ok) throw new Error(id + ' ' + r.status);
+    const c = await r.json();
+    const q = new Int16Array(b64bytes(c.verts).buffer); const V = new Float32Array(q.length); const s = c.radius / 32767;
+    for (let i = 0; i < q.length; i += 3) { V[i] = q[i] * s; V[i + 1] = -q[i + 1] * s; V[i + 2] = -q[i + 2] * s; }
+    let rv = 0; const n3 = 778 * 3;
+    for (let t = 0; t < c.T; t++) { let mx = 0, my = 0, mz = 0; const o = t * n3;
+      for (let i = 0; i < n3; i += 3) { mx += V[o + i]; my += V[o + i + 1]; mz += V[o + i + 2]; } mx /= 778; my /= 778; mz /= 778;
+      for (let i = 0; i < n3; i += 3) { V[o + i] -= mx; V[o + i + 1] -= my; V[o + i + 2] -= mz; rv = Math.max(rv, Math.hypot(V[o + i], V[o + i + 1], V[o + i + 2])); } }
+    c.viewRadius = rv;
+    c.V = V; c.A = {}; for (const k of Object.keys(c.act)) c.A[k] = b64bytes(c.act[k]);
+    c.auto = bestView(c);
+    c.frameURLs = c.frames.map((f) => 'data:image/jpeg;base64,' + f);
+    state.cache[id] = c; return c;
+  }
+
+  const views = [];
+  let sharedCam = null, controls = null, ctrlEl = null;
+  function makeView(el, key) {
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding; el.appendChild(renderer.domElement);
+    const scene = new THREE.Scene();
+    scene.add(new THREE.HemisphereLight(0xdfe6ff, 0x141a33, 0.75));
+    const key1 = new THREE.DirectionalLight(0xffffff, 0.6); key1.position.set(0.4, 0.6, 1); scene.add(key1);
+    const rim = new THREE.DirectionalLight(0x8f7bff, 0.35); rim.position.set(-0.6, -0.2, -1); scene.add(rim);
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(778 * 3), 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(778 * 3), 3));
+    geo.setAttribute('glow', new THREE.BufferAttribute(new Float32Array(778), 1));
+    geo.setIndex(new THREE.BufferAttribute(FACES, 1));
+    const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.55, metalness: 0.0, side: THREE.DoubleSide });
+    mat.onBeforeCompile = (sh) => {
+      sh.vertexShader = 'attribute float glow;\nvarying float vGlow;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n  vGlow = glow;');
+      sh.fragmentShader = 'varying float vGlow;\n' + sh.fragmentShader.replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n  totalEmissiveRadiance += vColor * vGlow * 0.85;');
+    };
+    const mesh = new THREE.Mesh(geo, mat); scene.add(mesh);
+    const v = { key, renderer, scene, mesh, geo, el }; views.push(v); return v;
+  }
+  const VIEW_OVERRIDE = { 'grocery_tj_7402b177_000022': { dir: [0.447, -0.127, 0.885], up: [-0.404, 0.854, 0.327], tilt: 0.0 },
+                          'office_csail_p1_ea8911e5_000168': { dir: [-0.769, 0.545, 0.334], up: [-0.01, 0.512, -0.859], tilt: 0.25 },
+                          'office_ml_p2_07eb8d74_001011': { dir: [-0.745, 0.447, 0.496], up: [-0.272, 0.475, -0.837], tilt: 0.25 } };
+  const VIEW_FOCUS = {};
+  function bestView(c) {
+    const focus = VIEW_FOCUS[c.slug] && REGION ? VIEW_FOCUS[c.slug] : null;
+    const n = 778, T = c.T, V = c.V, G = c.A.gt, F = FACES, N = new Float32Array(n * 3), K = 128, dirs = [], score = new Float64Array(K), fscore = new Float64Array(K);
+    for (let i = 0; i < K; i++) { const y = 1 - 2 * (i + 0.5) / K, r = Math.sqrt(1 - y * y), ph = i * 2.399963229728653; dirs.push([Math.cos(ph) * r, y, Math.sin(ph) * r]); }
+    for (let t = 0; t < T; t++) {
+      N.fill(0); const o = t * n * 3;
+      for (let f = 0; f < F.length; f += 3) { const a = o + 3 * F[f], b = o + 3 * F[f + 1], d = o + 3 * F[f + 2];
+        const ux = V[b] - V[a], uy = V[b + 1] - V[a + 1], uz = V[b + 2] - V[a + 2], wx = V[d] - V[a], wy = V[d + 1] - V[a + 1], wz = V[d + 2] - V[a + 2];
+        const nx = uy * wz - uz * wy, ny = uz * wx - ux * wz, nz = ux * wy - uy * wx;
+        for (let q = 0; q < 3; q++) { const vi = 3 * F[f + q]; N[vi] += nx; N[vi + 1] += ny; N[vi + 2] += nz; } }
+      let s = 0; for (let i = 0; i < n; i++) s += N[3 * i] * V[o + 3 * i] + N[3 * i + 1] * V[o + 3 * i + 1] + N[3 * i + 2] * V[o + 3 * i + 2];
+      const sg = s < 0 ? -1 : 1;
+      for (let i = 0; i < n; i++) { const g = G[t * n + i], inF = focus && REGION[i] === focus.region; if (!g && !inF) continue; const nx = N[3 * i], ny = N[3 * i + 1], nz = N[3 * i + 2], L = Math.hypot(nx, ny, nz) || 1;
+        for (let k = 0; k < K; k++) { const dp = sg * (nx * dirs[k][0] + ny * dirs[k][1] + nz * dirs[k][2]) / L; if (dp > 0) { score[k] += g * dp; if (inF) fscore[k] += (40 + g) * dp; } } }
+    }
+    let top = 0; for (let k = 0; k < K; k++) top = Math.max(top, score[k]);
+    let best = -1, bs = -1; for (let k = 0; k < K; k++) { const v = score[k] + 0.15 * top * Math.max(0, dirs[k][2]); if (v > bs) { bs = v; best = k; } }
+    let d = top > 0 ? dirs[best] : [0, 0, 1];
+    if (focus) { let fb = 0; for (let k = 1; k < K; k++) if (fscore[k] > fscore[fb]) fb = k; const e = dirs[fb], m = focus.mix;
+      const x = (1 - m) * d[0] + m * e[0], y = (1 - m) * d[1] + m * e[1], z = (1 - m) * d[2] + m * e[2], l = Math.hypot(x, y, z) || 1; d = [x / l, y / l, z / l]; }
+    const ov = VIEW_OVERRIDE[c.slug];
+    if (ov) { const t = ov.tilt, x = (1 - t) * ov.dir[0] + t * d[0], y = (1 - t) * ov.dir[1] + t * d[1], z = (1 - t) * ov.dir[2] + t * d[2], l = Math.hypot(x, y, z); d = [x / l, y / l, z / l]; }
+    const upRef = ov ? ov.up : [0, 1, 0];
+    let ux, uy, uz, ul; { const dp = upRef[0] * d[0] + upRef[1] * d[1] + upRef[2] * d[2]; ux = upRef[0] - dp * d[0]; uy = upRef[1] - dp * d[1]; uz = upRef[2] - dp * d[2]; ul = Math.hypot(ux, uy, uz); }
+    if (ul < 0.3) { ux = 1 - d[0] * d[0]; uy = -d[0] * d[1]; uz = -d[0] * d[2]; ul = Math.hypot(ux, uy, uz); }
+    return { dir: d, up: [ux / ul, uy / ul, uz / ul] };
+  }
+  function resetCamera(radius) {
+    const D = radius * 4.3;
+    if (!sharedCam) sharedCam = new THREE.PerspectiveCamera(28, 1, D / 100, D * 20);
+    sharedCam.near = D / 100; sharedCam.far = D * 20; sharedCam.updateProjectionMatrix();
+    const av = (state.clip && state.clip.auto) || { dir: [0, 0, 1], up: [0, 1, 0] };
+    sharedCam.position.set(av.dir[0] * D, av.dir[1] * D, av.dir[2] * D); sharedCam.up.set(av.up[0], av.up[1], av.up[2]);
+    sharedCam.lookAt(0, 0, 0);
+    if (controls) { controls.target.set(0, 0, 0); controls.update(); }
+  }
+  function attachControls() {
+    if (controls) controls.dispose();
+    const first = views.find((v) => v.key === 'gt') || views[0]; if (!first) return;
+    controls = new THREE.OrbitControls(sharedCam, first.renderer.domElement); controls.enableDamping = true; controls.dampingFactor = 0.12; controls.enablePan = false;
+    views.forEach((v) => v.renderer.domElement.addEventListener('dblclick', () => { if (state.clip) resetCamera(state.clip.viewRadius); }));
+    ctrlEl = first.renderer.domElement;
+    views.forEach((v) => { if (v !== first) forward(v.renderer.domElement, first.renderer.domElement); });
+  }
+  function forward(src, dst) {
+    ['pointerdown', 'pointermove', 'pointerup', 'wheel'].forEach((type) => src.addEventListener(type, (e) => {
+      if (type === 'wheel') { e.preventDefault(); }
+      const r = dst.getBoundingClientRect(), s = src.getBoundingClientRect();
+      const ev = new (type === 'wheel' ? WheelEvent : PointerEvent)(type, { bubbles: true, cancelable: true, clientX: r.left + (e.clientX - s.left) * r.width / s.width, clientY: r.top + (e.clientY - s.top) * r.height / s.height,
+        pointerId: e.pointerId, pointerType: e.pointerType, button: e.button, buttons: e.buttons, deltaY: e.deltaY, deltaMode: e.deltaMode, isPrimary: e.isPrimary });
+      if (type === 'pointerdown') { try { src.setPointerCapture(e.pointerId); } catch (_) {} }
+      dst.dispatchEvent(ev);
+    }, { passive: false }));
+  }
+
+  const SCR = new Float32Array(778), SCR2 = new Float32Array(778);
+  function smoothVerts(X, passes) {
+    for (let p = 0; p < passes; p++) { for (let i = 0; i < 778; i++) { let acc = X[i], cnt = 1; for (let q = NB_PTR[i]; q < NB_PTR[i + 1]; q++) { acc += X[NB_IDX[q]]; cnt++; } SCR2[i] = acc / cnt; } X.set(SCR2); }
+  }
+  function updateMeshes() {
+    const c = state.clip; if (!c) return; const T = c.T;
+    let t = Math.min(Math.max(state.t, 0), T - 1); const k = Math.floor(t); const a = state.smooth ? t - k : 0; const k2 = Math.min(k + 1, T - 1);
+    const n = 778, V = c.V;
+    for (const v of views) {
+      const P = v.geo.attributes.position.array, C = v.geo.attributes.color.array, G = v.geo.attributes.glow.array, A = c.A[v.key];
+      const o1 = k * n * 3, o2 = k2 * n * 3, a1 = k * n, a2 = k2 * n;
+      for (let i = 0; i < n * 3; i++) P[i] = V[o1 + i] * (1 - a) + V[o2 + i] * a;
+      const X = SCR; for (let i = 0; i < n; i++) X[i] = (A[a1 + i] * (1 - a) + A[a2 + i] * a) / 255;
+      const sensor = state.style === 'sensor';
+      if (sensor) { smoothVerts(X, 2); for (let i = 0; i < n; i++) X[i] = Math.pow(Math.min(1, X[i] * 1.2), 0.75); }
+      for (let i = 0; i < n; i++) {
+        const x = X[i]; const L = LUT[Math.min(255, Math.round(x * 255))];
+        if (sensor) { C[3 * i] = L[0]; C[3 * i + 1] = L[1]; C[3 * i + 2] = L[2]; G[i] = 0.35 + 0.65 * x; continue; }
+        const w = Math.min(x / BLEND, 1);
+        C[3 * i] = (1 - w) * GREY[0] + w * L[0]; C[3 * i + 1] = (1 - w) * GREY[1] + w * L[1]; C[3 * i + 2] = (1 - w) * GREY[2] + w * L[2]; G[i] = w;
+      }
+      v.geo.attributes.position.needsUpdate = true; v.geo.attributes.color.needsUpdate = true; v.geo.attributes.glow.needsUpdate = true; v.geo.computeVertexNormals(); v.geo.computeBoundingSphere();
+    }
+    const imA = $('vidA'), imB = $('vidB');
+    if (imA && imB) { const ua = c.frameURLs[k], ub = c.frameURLs[k2]; if (imA.dataset.k != k) { imA.src = ua; imA.dataset.k = k; } if (imB.dataset.k != k2) { imB.src = ub; imB.dataset.k = k2; } imB.style.opacity = a.toFixed(3); }
+    $('scrub').value = t.toFixed(2); $('fnum').textContent = `${Math.round(t) + 1} / ${T}`;
+    const ph = $('playhead'); if (ph) { const x = 30 + (560 * t) / (T - 1); ph.setAttribute('x1', x); ph.setAttribute('x2', x); }
+  }
+
+  function renderAll() {
+    for (const v of views) {
+      const w = v.el.clientWidth, h = v.el.clientHeight; if (!w || !h) continue;
+      const cv = v.renderer.domElement; if (cv.width !== Math.round(w * v.renderer.getPixelRatio()) || cv.height !== Math.round(h * v.renderer.getPixelRatio())) v.renderer.setSize(w, h, false);
+      sharedCam.aspect = w / h; sharedCam.updateProjectionMatrix(); v.renderer.render(v.scene, sharedCam);
+    }
+  }
+
+  function buildStage() {
+    const st = $('stage'); views.splice(0).forEach((v) => { v.renderer.dispose(); v.geo.dispose(); }); st.innerHTML = '';
+    st.className = 'stage' + (state.layout === 'all' ? ' all' : '') + (state.style === 'sensor' ? ' sensor' : '');
+    const vid = document.createElement('div'); vid.className = 'panel video';
+    vid.innerHTML = `<img id="vidA" alt="input frame"><img id="vidB" class="fade" alt=""><span class="tag"><span class="sw" style="--c:#8d96b8"></span>Input video</span><span class="corner" id="vidCorner"></span>`;
+    st.appendChild(vid);
+    const keys = state.layout === 'all' ? ['gt', ...COMPARE] : ['gt', state.method];
+    for (const k of keys) {
+      const p = document.createElement('div'); p.className = 'panel';
+      const name = state.index.rows.find((r) => r.key === k).name;
+      p.innerHTML = `<span class="tag"><span class="sw" style="--c:${METHOD_COLORS[k]}"></span>${name}</span>`;
+      st.appendChild(p); makeView(p, k);
+    }
+    attachControls(); if (state.clip) { resetCamera(state.clip.viewRadius); updateMeshes(); }
+    $('vidCorner').textContent = state.clip ? state.clip.lane : '';
+  }
+
+  function seg(el, items, cur, onPick, opts = {}) {
+    el.innerHTML = '';
+    items.forEach((it, i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', String(it.key === cur));
+      if (it.color) b.innerHTML = `<span class="sw" style="--c:${it.color}"></span>${it.name}`; else b.textContent = it.name;
+      if (opts.disabled) b.disabled = true;
+      b.addEventListener('click', () => onPick(it.key)); el.appendChild(b);
+    });
+  }
+  function renderLaneTabs() {
+    const el = $('laneTabs'); el.innerHTML = '';
+    LANES.forEach((ln) => { const n = state.index.clips.filter((c) => c.lane === ln).length; if (!n) return;
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'tab'; b.setAttribute('aria-pressed', String(ln === state.lane)); b.textContent = ln;
+      b.addEventListener('click', () => { state.lane = ln; renderLaneTabs(); renderThumbs(); const first = state.index.clips.find((c) => c.lane === ln); if (first) pickClip(first.id); }); el.appendChild(b); });
+  }
+  function renderThumbs() {
+    const el = $('thumbs'); el.innerHTML = '';
+    state.index.clips.filter((c) => c.lane === state.lane).forEach((c) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'thumb'; b.setAttribute('aria-pressed', String(state.clip && state.clip.id === c.id));
+      b.innerHTML = `<img alt="" src="data:image/jpeg;base64,${c.thumb}"><span>${c.label || prettySlug(c.lane, c.slug)}</span>`
+      b.addEventListener("click", () => pickClip(c.id)); el.appendChild(b);
+    });
+  }
+  async function pickClip(id) {
+    const st = $('stage'); const ld = document.createElement('div'); ld.className = 'loading'; ld.textContent = 'loading clip…'; st.firstChild && st.firstChild.appendChild(ld);
+    try {
+      const c = await loadClip(id); state.clip = c; state.t = 0; $('scrub').max = String(c.T - 1);
+      resetCamera(c.viewRadius); updateMeshes(); renderThumbs(); drawChart();
+      $('vidCorner').textContent = c.lane; $('meta').innerHTML = '';
+    } catch (e) { $('meta').innerHTML = `<span class="err">Could not load ${id}: ${e.message}</span>`; }
+    finally { ld.remove(); }
+  }
+  const shortUnits = (u) => /kPa/i.test(u) ? 'kPa' : 'counts';
+
+  function drawChart() {
+    const svg = $('chart'), c = state.clip; if (!c) return; const T = c.T;
+    const keys = state.layout === 'all' ? ['gt', ...COMPARE] : ['gt', state.method];
+    const maxv = Math.max(1e-9, ...keys.flatMap((k) => c.totals[k]));
+    const X = (i) => 30 + (560 * i) / (T - 1), Y = (v) => 44 - (38 * v) / maxv;
+    let s = '';
+    for (let g = 0; g <= 2; g++) { const y = 6 + (38 * g) / 2; s += `<line x1="30" x2="590" y1="${y}" y2="${y}" stroke="#1e2748" stroke-width="1" vector-effect="non-scaling-stroke"/>`; }
+    for (let i = 0; i < T; i += 3) s += `<text x="${X(i)}" y="55" fill="#5a6487" font-size="10" font-family="IBM Plex Mono, monospace" text-anchor="middle">${i + 1}</text>`;
+    s += `<text x="4" y="10" fill="#5a6487" font-size="10" font-family="IBM Plex Mono, monospace">max</text><text x="4" y="47" fill="#5a6487" font-size="10" font-family="IBM Plex Mono, monospace">0</text>`;
+    for (const k of keys) {
+      const pts = c.totals[k].map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+      const gt = k === 'gt';
+      s += `<polyline points="${pts}" fill="none" stroke="${METHOD_COLORS[k]}" stroke-width="${gt ? 1.6 : 2}" ${gt ? 'stroke-dasharray="5 4"' : ''} vector-effect="non-scaling-stroke" opacity="${gt ? 0.9 : 0.95}"/>`;
+    }
+    s += `<line id="playhead" x1="30" x2="30" y1="3" y2="46" stroke="#ff4fd8" stroke-width="1.2" vector-effect="non-scaling-stroke" opacity=".8"/>`;
+    svg.innerHTML = s;
+    $('chartLegend').innerHTML = keys.map((k) => `<span><i style="--c:${METHOD_COLORS[k]}"></i>${state.index.rows.find((r) => r.key === k).name}</span>`).join('');
+    updateMeshes();
+  }
+
+  let last = performance.now();
+  function tick(now) {
+    const dt = Math.min(0.1, (now - last) / 1000); last = now;
+    if (state.playing && state.clip) { state.t += dt * 4 * state.speed; if (state.t > state.clip.T - 1) state.t = 0; updateMeshes(); }
+    if (controls) controls.update();
+    renderAll(); requestAnimationFrame(tick);
+  }
+
+  function bind() {
+    $('playBtn').addEventListener('click', () => { state.playing = !state.playing; $('playBtn').textContent = state.playing ? '❚❚ Pause' : '▶ Play'; });
+    $('scrub').addEventListener('input', (e) => { state.t = parseFloat(e.target.value); if (state.playing) { state.playing = false; $('playBtn').textContent = '▶ Play'; } updateMeshes(); });
+    window.addEventListener('keydown', (e) => {
+      if (e.target && /input|textarea/i.test(e.target.tagName) && e.target.type !== 'range') return;
+      if (e.code === 'Space') { e.preventDefault(); $('playBtn').click(); }
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); state.playing = false; $('playBtn').textContent = '▶ Play'; const T = state.clip ? state.clip.T : 16; state.t = (Math.round(state.t) + (e.key === 'ArrowRight' ? 1 : -1) + T) % T; updateMeshes(); }
+    });
+  }
+
+  (async () => {
+    try {
+      await loadIndex(); sharedCam = new THREE.PerspectiveCamera(28, 1, 0.001, 100);
+      renderLaneTabs(); bind(); buildStage();
+      const clip = state.index.clips.find((c) => c.lane === LANES[0]) || state.index.clips[0];
+      state.lane = clip.lane; renderLaneTabs(); renderThumbs(); await pickClip(clip.id);
+      requestAnimationFrame(tick);
+    } catch (e) { $('stage').innerHTML = `<div class="card err">Viewer data could not be loaded: ${e.message}</div>`; }
+  })();
+})();
+</script>
+</body>
+</html>
