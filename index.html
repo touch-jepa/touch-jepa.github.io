@@ -128,8 +128,7 @@ label.chk input { accent-color: var(--neon); }
 .rlede { max-width: 760px; margin: 0 auto 16px; color: var(--muted); text-align: center; text-wrap: balance; }
 .rtabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 14px; }
 .rfig { margin: 0; background: #ffffff; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 40px -18px rgba(123,108,255,.45); }
-.rfig video { display: block; width: 100%; height: auto; aspect-ratio: 1440 / 924; background: #ffffff; }
-.rfig.energy video { aspect-ratio: 1440 / 760; }
+.rfig video { display: block; width: 100%; height: auto; aspect-ratio: 2160 / 924; background: #ffffff; }
 .rcap { max-width: 760px; margin: 12px auto 0; color: var(--muted); font-size: .95rem; line-height: 1.6; text-align: center; text-wrap: pretty; }
 .rcap b { color: var(--fg); font-weight: 600; }
 .rcap .n { font-variant-numeric: tabular-nums; }
@@ -202,8 +201,6 @@ table.bench .r3 { background: rgba(90,162,255,.12); color: var(--fg); }
 .cem .st h4 { margin: 8px 0 6px; font-size: 1.05rem; }
 .cem .st p { margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.55; }
 .cem svg { display: block; width: 100%; height: 92px; margin: 4px 0 8px; }
-.energy-eq { text-align: center; margin: 18px auto 6px; font: 500 1.15rem/1.4 "Times New Roman", Times, serif; color: var(--fg); }
-.energy-eq .lbl { display: block; font: 500 12px/1.4 var(--mono); color: var(--muted); letter-spacing: .04em; margin-top: 6px; }
 .succ { display: grid; gap: 10px; margin: 8px 0 0; }
 .succ .row { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 12px; align-items: center; }
 .succ .task { font-weight: 600; text-align: right; }
@@ -218,9 +215,9 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 section[id] { scroll-margin-top: 24px; }
 .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 22px 0 0; }
-.lbtn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px 9px 13px; border-radius: 999px; background: linear-gradient(90deg, #6f7dff, #c25bff 55%, #ff4fd8); border: 1px solid transparent; color: #fff; font: 600 13px/1 var(--sans); text-decoration: none; transition: box-shadow .15s, transform .15s; }
+.lbtn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px 9px 13px; border-radius: 999px; background: linear-gradient(90deg, #6f7dff, #c25bff 55%, #ff4fd8); border: 1px solid transparent; background-clip: padding-box; overflow: hidden; color: #fff; font: 600 13px/1 var(--sans); text-decoration: none; transition: filter .15s, transform .15s; }
 .lbtn svg { width: 15px; height: 15px; flex: none; }
-a.lbtn:hover, a.lbtn:focus-visible { box-shadow: 0 0 16px -4px var(--neon); transform: translateY(-1px); }
+a.lbtn:hover, a.lbtn:focus-visible { filter: brightness(1.08); transform: translateY(-1px); }
 .lbtn.soon { cursor: default; }
 .sidenav { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); z-index: 20; display: flex; flex-direction: column; gap: 2px; padding: 8px; border-radius: 14px;
   background: linear-gradient(160deg, rgba(111,125,255,.16), rgba(194,91,255,.12) 55%, rgba(255,79,216,.14)); border: 1px solid rgba(160,140,255,.28);
@@ -256,9 +253,9 @@ a.lbtn:hover, a.lbtn:focus-visible { box-shadow: 0 0 16px -4px var(--neon); tran
     <p class="authors"><a href="https://mnseong.github.io/" target="_blank" rel="noopener">Minseong Kweon</a><sup>1,2</sup><span class="sep">,</span> <a href="https://fengq1a0.github.io/" target="_blank" rel="noopener">Qiao Feng</a><sup>2</sup><span class="sep">,</span> <a href="https://yh2371.github.io/" target="_blank" rel="noopener">Yiming Huang</a><sup>2</sup><span class="sep">,</span> <a href="https://lingjie0206.github.io/" target="_blank" rel="noopener">Lingjie Liu</a><sup>2</sup></p>
     <p class="affil"><sup>1</sup>University of Minnesota <span class="gap"></span> <sup>2</sup>University of Pennsylvania</p>
     <div class="links">
-      <span class="lbtn soon" title="Coming soon" aria-disabled="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V9h5.5L13 3.5zM7.5 13v5h1.3v-1.6h.8c1.1 0 1.9-.6 1.9-1.7S10.7 13 9.6 13H7.5zm1.3 1.1h.7c.4 0 .7.2.7.6s-.3.6-.7.6h-.7v-1.2zm3.3-1.1v5h1.8c1.5 0 2.4-.9 2.4-2.5s-.9-2.5-2.4-2.5h-1.8zm1.3 1.1h.4c.8 0 1.2.5 1.2 1.4s-.4 1.4-1.2 1.4h-.4v-2.8zM17 13v5h1.3v-2h1.6v-1h-1.6v-.9H20V13h-3z"/></svg><span>Paper</span></span>
-      <span class="lbtn soon" title="Coming soon" aria-disabled="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M5 4l14 16M19 4l-5.6 6.4M10.6 13.6L5 20"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></svg><span>arXiv</span></span>
-      <span class="lbtn soon" title="Coming soon" aria-disabled="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>Code</span></span>
+      <a class="lbtn" href="https://arxiv.org/pdf/2610.28519" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V9h5.5L13 3.5zM7.5 13v5h1.3v-1.6h.8c1.1 0 1.9-.6 1.9-1.7S10.7 13 9.6 13H7.5zm1.3 1.1h.7c.4 0 .7.2.7.6s-.3.6-.7.6h-.7v-1.2zm3.3-1.1v5h1.8c1.5 0 2.4-.9 2.4-2.5s-.9-2.5-2.4-2.5h-1.8zm1.3 1.1h.4c.8 0 1.2.5 1.2 1.4s-.4 1.4-1.2 1.4h-.4v-2.8zM17 13v5h1.3v-2h1.6v-1h-1.6v-.9H20V13h-3z"/></svg><span>Paper</span></a>
+      <a class="lbtn" href="https://arxiv.org/abs/2610.28519" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M5 4l14 16M19 4l-5.6 6.4M10.6 13.6L5 20"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></svg><span>arXiv</span></a>
+      <a class="lbtn" href="https://github.com/mnseong/touch-jepa.git" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>Code</span></a>
     </div>
   </header>
 
@@ -304,8 +301,8 @@ a.lbtn:hover, a.lbtn:focus-visible { box-shadow: 0 0 16px -4px var(--neon); tran
 
   <section class="method" id="method" lang="en" aria-labelledby="mo-title">
     <h2 id="mo-title">Method Overview</h2>
-    <figure class="mfig"><img src="media/method_overview_v2.jpg" width="2170" height="880" loading="lazy" alt="Touch-JEPA overview: a y-encoder reads unmasked video to produce target features at hand-surface locations; an x-encoder sees masked video plus the estimated hand mesh and predicts them; tactile labels supervise the same states when available."></figure>
-    <p class="mcap"><b>Touch-JEPA overview.</b> Given a human-object interaction video, the <i>y</i>-encoder processes unmasked RGB to produce target visual features at geometry-aligned hand-surface locations. The <i>x</i>-encoder combines masked RGB with estimated hand geometry to predict these targets. When tactile annotations are available, joint training additionally supervises contact and force-related predictions decoded from masked <i>x</i>-encoder states before the predictor, providing complementary physical grounding for the shared representation.</p>
+    <figure class="mfig"><img src="media/method_overview_v2.jpg" width="2411" height="978" loading="lazy" alt="Touch-JEPA overview: a y-encoder reads unmasked video to produce target features at hand-surface points; an x-encoder sees masked video plus the estimated hand geometry, and a predictor maps its hand-surface latents to those targets on all clips; on labeled clips a tactile loss also supervises the latents. After training the frozen encoder with a readout gives touch from video and supports robot planning."></figure>
+    <p class="mcap"><b>Touch-JEPA overview.</b> Given a hand-object interaction video, the <i>y</i>-encoder processes unmasked RGB to produce target visual features at geometry-aligned hand-surface locations. The <i>x</i>-encoder combines masked RGB with estimated hand geometry to predict these targets. When tactile annotations are available, joint training additionally supervises contact and magnitude predictions decoded from masked <i>x</i>-encoder states before the predictor, providing complementary physical grounding for the shared representation.</p>
   </section>
 
 
@@ -325,13 +322,13 @@ a.lbtn:hover, a.lbtn:focus-visible { box-shadow: 0 0 16px -4px var(--neon); tran
         <tr class=""><td class="m">PressureFormer</td><td><span class="r3">0.785</span></td><td><span class="r3">0.492</span></td><td><span class="r2">0.534</span></td><td class="gap"></td><td><span class="r3">0.920</span></td><td>0.257</td><td>0.744</td><td class="gap"></td><td>0.811</td><td><span class="r3">0.751</span></td><td><span class="r3">0.695</span></td></tr>
         <tr class=""><td class="m">HOPE</td><td>0.762</td><td>0.471</td><td>0.517</td><td class="gap"></td><td>0.911</td><td><span class="r3">0.391</span></td><td>0.705</td><td class="gap"></td><td><span class="r3">0.844</span></td><td>0.715</td><td>0.609</td></tr>
         <tr class="ours sep"><td class="m">Ours (SSL)</td><td><span class="r2">0.836</span></td><td><span class="r2">0.549</span></td><td><span class="r3">0.527</span></td><td class="gap"></td><td><span class="r2">0.925</span></td><td><span class="r2">0.475</span></td><td><span class="r2">0.783</span></td><td class="gap"></td><td><span class="r2">0.914</span></td><td><span class="r2">0.826</span></td><td><span class="r2">0.699</span></td></tr>
-        <tr class="ours joint"><td class="m">Ours (joint)</td><td><span class="r1">0.862</span></td><td><span class="r1">0.582</span></td><td><span class="r1">0.540</span></td><td class="gap"></td><td><span class="r1">0.949</span></td><td><span class="r1">0.553</span></td><td><span class="r1">0.802</span></td><td class="gap"></td><td><span class="r1">0.941</span></td><td><span class="r1">0.861</span></td><td><span class="r1">0.752</span></td></tr>
+        <tr class="ours joint"><td class="m">Ours (Joint)</td><td><span class="r1">0.862</span></td><td><span class="r1">0.582</span></td><td><span class="r1">0.540</span></td><td class="gap"></td><td><span class="r1">0.949</span></td><td><span class="r1">0.553</span></td><td><span class="r1">0.802</span></td><td class="gap"></td><td><span class="r1">0.941</span></td><td><span class="r1">0.861</span></td><td><span class="r1">0.752</span></td></tr>
         <tr class="ref sep"><td class="m">Static prior</td><td>0.832</td><td>0.542</td><td>0.500</td><td class="gap"></td><td>0.819</td><td>0.335</td><td>0.500</td><td class="gap"></td><td>0.559</td><td>0.618</td><td>0.500</td></tr>
       </tbody>
     </table></div>
-    <div class="rk"><span><i style="background:rgba(255,79,216,.45)"></i>1st</span><span><i style="background:rgba(123,108,255,.45)"></i>2nd</span><span><i style="background:rgba(90,162,255,.25)"></i>3rd</span><span>among learned methods</span></div></div>
+    <div class="rk"><span><i style="background:rgba(255,79,216,.45)"></i>1st</span><span><i style="background:rgba(123,108,255,.45)"></i>2nd</span><span><i style="background:rgba(90,162,255,.25)"></i>3rd</span><span>among learned methods, equal displayed values share a rank</span></div></div>
     <ol class="find">
-      <li data-n="1"><b>Ours (joint) is best in all nine columns</b>, across three sensors, viewpoints and tasks.</li>
+      <li data-n="1"><b>Ours (Joint) is best in all nine columns</b>, across three sensors, viewpoints and tasks.</li>
       <li data-n="2"><b>Self-supervision alone already beats supervised baselines:</b> Ours (SSL) exceeds every retrained baseline in AUROC and F1 on all three datasets.</li>
     </ol>
 
@@ -342,93 +339,90 @@ a.lbtn:hover, a.lbtn:focus-visible { box-shadow: 0 0 16px -4px var(--neon); tran
         <tr><th class="m">Method</th><th>nMAE&nbsp;&darr;</th><th>nRMSE&nbsp;&darr;</th><th>t-&rho;&nbsp;&uarr;</th><th class="gap"></th><th>nMAE&nbsp;&darr;</th><th>nRMSE&nbsp;&darr;</th><th>t-&rho;&nbsp;&uarr;</th><th class="gap"></th><th>nMAE&nbsp;&darr;</th><th>nRMSE&nbsp;&darr;</th><th>t-&rho;&nbsp;&uarr;</th></tr>
       </thead>
       <tbody>
-        <tr class=""><td class="m">PressureVision</td><td><span class="r3">0.363</span></td><td>1.099</td><td>&minus;0.005</td><td class="gap"></td><td><span class="r3">0.130</span></td><td><span class="r3">0.919</span></td><td><span class="r3">0.280</span></td><td class="gap"></td><td>0.738</td><td>1.210</td><td>0.036</td></tr>
-        <tr class=""><td class="m">PressureVision++</td><td>0.364</td><td>1.102</td><td>&minus;0.009</td><td class="gap"></td><td>0.136</td><td>0.967</td><td>0.155</td><td class="gap"></td><td>0.746</td><td>1.219</td><td>0.013</td></tr>
-        <tr class=""><td class="m">PressureFormer</td><td>0.364</td><td><span class="r3">0.939</span></td><td><span class="r3">0.091</span></td><td class="gap"></td><td>0.137</td><td>0.981</td><td>0.181</td><td class="gap"></td><td><span class="r3">0.590</span></td><td><span class="r3">0.914</span></td><td><span class="r3">0.111</span></td></tr>
-        <tr class=""><td class="m">HOPE</td><td>0.366</td><td>0.974</td><td>0.056</td><td class="gap"></td><td>0.130</td><td>0.951</td><td>0.195</td><td class="gap"></td><td>0.614</td><td>0.922</td><td>0.096</td></tr>
-        <tr class="ours sep"><td class="m">Ours (SSL)</td><td><span class="r2">0.326</span></td><td><span class="r2">0.914</span></td><td><span class="r1">0.159</span></td><td class="gap"></td><td><span class="r2">0.129</span></td><td><span class="r2">0.893</span></td><td><span class="r1">0.466</span></td><td class="gap"></td><td><span class="r2">0.495</span></td><td><span class="r2">0.781</span></td><td><span class="r2">0.162</span></td></tr>
-        <tr class="ours joint"><td class="m">Ours (joint)</td><td><span class="r1">0.314</span></td><td><span class="r1">0.879</span></td><td><span class="r2">0.142</span></td><td class="gap"></td><td><span class="r1">0.123</span></td><td><span class="r1">0.872</span></td><td><span class="r2">0.458</span></td><td class="gap"></td><td><span class="r1">0.461</span></td><td><span class="r1">0.740</span></td><td><span class="r1">0.245</span></td></tr>
+        <tr class=""><td class="m">PressureVision</td><td><span class="r3">0.363</span></td><td>1.099</td><td>&minus;0.001</td><td class="gap"></td><td><span class="r3">0.130</span></td><td><span class="r3">0.919</span></td><td><span class="r3">0.105</span></td><td class="gap"></td><td>0.738</td><td>1.210</td><td>0.026</td></tr>
+        <tr class=""><td class="m">PressureVision++</td><td>0.364</td><td>1.102</td><td>0.000</td><td class="gap"></td><td>0.136</td><td>0.967</td><td>0.038</td><td class="gap"></td><td>0.746</td><td>1.219</td><td>0.007</td></tr>
+        <tr class=""><td class="m">PressureFormer</td><td>0.364</td><td><span class="r3">0.939</span></td><td><span class="r1">0.035</span></td><td class="gap"></td><td>0.137</td><td>0.981</td><td>0.031</td><td class="gap"></td><td><span class="r3">0.590</span></td><td><span class="r3">0.914</span></td><td><span class="r3">0.077</span></td></tr>
+        <tr class=""><td class="m">HOPE</td><td>0.366</td><td>0.974</td><td>0.021</td><td class="gap"></td><td><span class="r3">0.130</span></td><td>0.951</td><td>0.067</td><td class="gap"></td><td>0.614</td><td>0.922</td><td>0.069</td></tr>
+        <tr class="ours sep"><td class="m">Ours (SSL)</td><td><span class="r2">0.326</span></td><td><span class="r2">0.914</span></td><td><span class="r3">0.030</span></td><td class="gap"></td><td><span class="r2">0.129</span></td><td><span class="r2">0.893</span></td><td><span class="r2">0.239</span></td><td class="gap"></td><td><span class="r2">0.495</span></td><td><span class="r2">0.781</span></td><td><span class="r2">0.152</span></td></tr>
+        <tr class="ours joint"><td class="m">Ours (Joint)</td><td><span class="r1">0.314</span></td><td><span class="r1">0.879</span></td><td><span class="r1">0.035</span></td><td class="gap"></td><td><span class="r1">0.123</span></td><td><span class="r1">0.872</span></td><td><span class="r1">0.249</span></td><td class="gap"></td><td><span class="r1">0.461</span></td><td><span class="r1">0.740</span></td><td><span class="r1">0.180</span></td></tr>
         <tr class="ref sep"><td class="m">Static prior</td><td>0.398</td><td>0.898</td><td>N/A</td><td class="gap"></td><td>0.221</td><td>0.955</td><td>N/A</td><td class="gap"></td><td>0.755</td><td>1.047</td><td>N/A</td></tr>
       </tbody>
     </table></div>
-    <div class="rk"><span><i style="background:rgba(255,79,216,.45)"></i>1st</span><span><i style="background:rgba(123,108,255,.45)"></i>2nd</span><span><i style="background:rgba(90,162,255,.25)"></i>3rd</span><span>among learned methods</span></div></div>
+    <div class="rk"><span><i style="background:rgba(255,79,216,.45)"></i>1st</span><span><i style="background:rgba(123,108,255,.45)"></i>2nd</span><span><i style="background:rgba(90,162,255,.25)"></i>3rd</span><span>among learned methods, equal displayed values share a rank</span></div></div>
     <ol class="find">
-      <li data-n="1"><b>One of our two models is best in every column.</b></li>
-      <li data-n="2"><b>Ours (SSL) surpasses every supervised baseline in nMAE and nRMSE</b> on all three datasets, and our models also lead the temporal rank agreement (t-&rho;) on every dataset.</li>
+      <li data-n="1"><b>Ours (Joint) is best in every column</b>, tied with PressureFormer in OpenTouch t-&rho;.</li>
+      <li data-n="2"><b>Ours (SSL) has lower nRMSE than every retrained supervised baseline</b> on all three datasets and lower nMAE on OpenTouch and HandSense, on par with the best baseline on PVDB.</li>
+      <li data-n="3"><b>On PVDB, within-contact temporal correlation reaches 0.239</b> for Ours (SSL), against 0.105 for the strongest supervised baseline, and 0.249 with joint training. It remains low on OpenTouch and HandSense.</li>
     </ol>
-    <p class="metricnote">AUROC and F1: per-entry contact; tAUC: contact over time. nMAE and nRMSE: magnitude error normalized per dataset; t-&rho;: rank correlation of the hand's summed magnitude over time within contact. Targets are nominal pressure for PVDB and uncalibrated sensor magnitudes for OpenTouch and HandSense. The static prior is a video-free per-channel reference and is not ranked.</p>
+    <p class="metricnote">AUROC and F1: pooled contact over valid entries; tAUC: temporal AUROC, computed per sensor within a clip and averaged across sequences. nMAE and nRMSE: magnitude error normalized by a fixed training-subset standard deviation of each dataset's target; t-&rho;: temporal Spearman correlation, computed per sensor within a clip over ground-truth contact frames and averaged across sequences. Targets are nominal pressure for PVDB and uncalibrated sensor magnitudes for OpenTouch and HandSense. The static prior is a video-free per-channel reference and is not ranked. Its prediction is constant in every sequence, so its t-&rho; is undefined (N/A).</p>
 
 
     <h3 id="qs-title">Qualitative Comparison <span class="tag3">appendix examples</span></h3>
-    <p class="sub">Four test sequences from the appendix where the difference is easy to see. Every method is drawn on the same estimated hand mesh with the same color scale, at four frames of each sequence.</p>
+    <p class="sub">Four test sequences from the appendix. Eight frames per sequence progress from left to right, with the ground truth and six methods drawn on the same estimated hand mesh. Brighter colors indicate greater tactile magnitude.</p>
     <div class="samples">
-      <figure><img src="media/samples/handsense_piano.jpg" width="1034" height="1230" loading="lazy" alt="HandSense piano key press: the ground truth and Ours (joint) light up the pressing fingertip, while HOPE, PressureFormer and PressureVision++ stay dark."><figcaption>HandSense <span>&middot; piano key press</span></figcaption></figure>
-      <figure><img src="media/samples/opentouch_office.jpg" width="1034" height="1230" loading="lazy" alt="OpenTouch office: Ours (joint) matches the thumb and finger contact of the ground truth, HOPE spreads activation over the whole palm, PressureVision++ predicts nothing."><figcaption>OpenTouch <span>&middot; office</span></figcaption></figure>
-      <figure><img src="media/samples/pvdb_palm_and_fingers.jpg" width="1034" height="1230" loading="lazy" alt="PressureVision DB palm-and-finger press: Ours (joint) follows the palm and fingertip pressure of the ground truth over time; the baselines miss most of it."><figcaption>PressureVision DB <span>&middot; palm-and-finger press</span></figcaption></figure>
-      <figure><img src="media/samples/pvdb_palm.jpg" width="1034" height="1230" loading="lazy" alt="PressureVision DB palm press: Ours (joint) reproduces the rise and fall of palm pressure; HOPE and PressureVision++ predict almost none."><figcaption>PressureVision DB <span>&middot; palm press</span></figcaption></figure>
+      <figure><img src="media/samples/handsense_piano.jpg" width="1230" height="1216" loading="lazy" alt="HandSense piano key press: the ground truth and both Ours rows light up the pressing fingertip and fade as the key is released; HOPE shows a faint fingertip response in every frame, and PressureFormer and both PressureVision models stay dark."><figcaption>HandSense <span>&middot; piano key press</span></figcaption></figure>
+      <figure><img src="media/samples/opentouch_office.jpg" width="1230" height="1217" loading="lazy" alt="OpenTouch office: Ours (Joint) follows the thumb contact of the ground truth, HOPE spreads activation over the palm, and PressureVision++ predicts almost nothing."><figcaption>OpenTouch <span>&middot; office</span></figcaption></figure>
+      <figure><img src="media/samples/pvdb_palm_and_fingers.jpg" width="1231" height="1216" loading="lazy" alt="PressureVision DB palm-and-finger press: both Ours rows follow the palm and fingertip pressure of the ground truth as it rises and falls; the baselines miss most of it."><figcaption>PressureVision DB <span>&middot; palm-and-finger press</span></figcaption></figure>
+      <figure><img src="media/samples/pvdb_palm.jpg" width="1231" height="1216" loading="lazy" alt="PressureVision DB palm press: Ours (Joint) reproduces the rise and fall of palm pressure; HOPE and PressureVision++ predict almost none."><figcaption>PressureVision DB <span>&middot; palm press</span></figcaption></figure>
     </div>
 
     <div class="two" style="margin-top:44px">
       <div>
         <h3 style="margin-top:0">Label Efficiency <span class="tag3">fewer tactile labels</span></h3>
-        <p class="sub">Contact AUROC averaged over the three test sets as the share of labeled sensor recordings drops from 100% to 1%. Joint training keeps the lead at every budget, and the gap to the supervised model widens as labels become scarce, reaching <b style="color:var(--fg)">+0.067</b> at 1%.</p>
+        <p class="sub">Contact AUROC averaged over the three test sets as the share of labeled sensor recordings drops from 100% to 1%. Labeled clips are oversampled identically in the joint and Supervised arms. Joint training stays above Ours (SSL), the two-stage control and Supervised at every fraction up to 10%, and its lead over Supervised widens as labels become scarce, reaching <b style="color:var(--fg)">+0.067</b> at 1%.</p>
       </div>
-      <figure class="wfig"><img src="media/label_efficiency.png" width="828" height="530" loading="lazy" alt="Mean contact AUROC versus the share of labeled sensor recordings (100%, 10%, 3%, 1%) for Ours (joint), Ours (SSL), Two-stage and Supervised; Ours (joint) is highest at every budget."></figure>
+      <figure class="wfig"><img src="media/label_efficiency.png" width="1104" height="706" loading="lazy" alt="Mean contact AUROC versus the share of labeled sensor recordings (100%, 10%, 3%, 1%) for Ours (Joint), Ours (SSL), Two-stage and Supervised; Ours (Joint) is highest at every budget shown."></figure>
     </div>
 
     <h3 id="zs-title">Zero-Shot Transfer to a Robot Hand <span class="tag3">no robot tactile data</span></h3>
-    <p class="sub">Applied without adaptation to 89 real Allegro-hand episodes, with no robot tactile data in training.</p>
+    <p class="sub">Human-trained predictors applied without adaptation to 89 real Allegro-hand episodes (10,562 frames), with hand geometry from measured joint angles and no robot tactile data in training. AP is average precision and &rho; per-episode Spearman.</p>
     <div class="tcard"><div class="tscroll"><table class="bench" style="min-width:520px" aria-labelledby="zs-title">
       <thead><tr><th class="m">Method</th><th>AUROC&nbsp;&uarr;</th><th>AP&nbsp;&uarr;</th><th>F1&nbsp;&uarr;</th><th>&rho;&nbsp;&uarr;</th></tr></thead>
       <tbody>
         <tr><td class="m">PressureVision</td><td>0.506</td><td>0.443</td><td>0.474</td><td>&minus;0.032</td></tr>
         <tr><td class="m">PressureVision++</td><td>0.435</td><td>0.395</td><td>0.429</td><td>&minus;0.039</td></tr>
+        <tr><td class="m">PressureFormer</td><td>0.537</td><td>0.485</td><td>0.502</td><td>&minus;0.017</td></tr>
         <tr><td class="m">HOPE</td><td><span class="r3">0.582</span></td><td><span class="r3">0.510</span></td><td><span class="r3">0.535</span></td><td><span class="r2">0.159</span></td></tr>
         <tr class="ours sep"><td class="m">Ours (SSL)</td><td><span class="r1">0.676</span></td><td><span class="r1">0.608</span></td><td><span class="r1">0.608</span></td><td><span class="r1">0.183</span></td></tr>
-        <tr class="ours joint"><td class="m">Ours (joint)</td><td><span class="r2">0.628</span></td><td><span class="r2">0.529</span></td><td><span class="r2">0.569</span></td><td><span class="r3">0.106</span></td></tr>
+        <tr class="ours joint"><td class="m">Ours (Joint)</td><td><span class="r2">0.628</span></td><td><span class="r2">0.529</span></td><td><span class="r2">0.569</span></td><td><span class="r3">0.106</span></td></tr>
       </tbody>
     </table></div></div>
+    <ol class="find">
+      <li data-n="1"><b>Ours (SSL) leads all four metrics on the Allegro hand</b> and outperforms the joint model, which still beats the supervised baselines in contact estimation.</li>
+      <li data-n="2"><b>On the five-fingertip Inspire hand, Ours (SSL) also leads all four metrics.</b> The robot planner below therefore uses the label-free SSL encoder.</li>
+    </ol>
   </section>
 
   <section class="robot" id="robot" lang="en" aria-labelledby="rb-title">
     <h2 id="rb-title">Robot Manipulation</h2>
-    <p class="rlede">Each video shows one fresh simulated scene with the same planner and task rule for both encoders: Ours (joint) succeeds and V-JEPA 2.1 (frozen) fails.</p>
+    <p class="rlede">Touch-JEPA-AC plans with the frozen Ours (SSL) encoder. Each video shows one of the 50 matched simulated scenes for Ours (SSL), V-JEPA 2.1 and Octo: Ours (SSL) succeeds, and the other two fail.</p>
     <div class="rtabs" role="tablist" aria-label="Task">
-      <button class="tab" type="button" role="tab" data-task="grasp" aria-pressed="true">Grasp</button>
+      <button class="tab" type="button" role="tab" data-task="grasp" aria-pressed="true">Grasp-lift</button>
       <button class="tab" type="button" role="tab" data-task="place" aria-pressed="false">Place</button>
-      <button class="tab" type="button" role="tab" data-task="reach" aria-pressed="false">Reach with object</button>
     </div>
-    <figure class="rfig"><video id="rb-video" src="media/robot/robot_grasp_joint_vs_vjepa21.mp4" poster="media/robot/robot_grasp_joint_vs_vjepa21_poster.jpg" muted loop playsinline preload="metadata" aria-label="Grasp: Ours (joint) lifts and holds the cube; V-JEPA 2.1 (frozen) drops it"></video></figure>
+    <figure class="rfig"><video id="rb-video" src="media/robot/demo_grasp_ours_vjepa21_octo.mp4" poster="media/robot/demo_grasp_ours_vjepa21_octo_poster.jpg" muted loop playsinline preload="metadata" aria-label="Grasp-lift: Ours (SSL) lifts and holds the cube; V-JEPA 2.1 drops it and Octo does not lift it"></video></figure>
     <p class="rcap" id="rb-cap"></p>
 
 
-    <h3>Success on 50 fresh scenes</h3>
-    <div class="succ" id="succ" aria-label="Successes out of 50 fresh scenes per task"></div>
-    <p class="rcap">Same scenes, planner and task rule for every encoder; rules were chosen on separate development scenes before the final run.</p>
-
-
-    <h3>How Touch-JEPA-AC plans</h3>
-    <p class="rlede">Touch-JEPA-AC turns the frozen encoder into a world model for a simulated robot hand, following V-JEPA&nbsp;2-AC. An action-conditioned predictor, trained on robot trajectories, imagines what the scene and the hand surface will look like after a candidate move. The robot then plans in this learned space: at every decision it picks the move whose imagined outcome is closest to the next goal image, executes it, looks again, and replans.</p>
-    <p class="energy-eq">E(<b>a</b>) = |&thinsp;B&#770;(<b>a</b>) &minus; B<sup>&#9733;</sup>&thinsp;| + w&thinsp;|&thinsp;U&#770;(<b>a</b>) &minus; U<sup>&#9733;</sup>&thinsp;|<span class="lbl">energy of a move a: scene features B and hand-surface (touch) features U, predicted vs goal</span></p>
-    <figure class="rfig energy"><video id="rb-energy" src="media/robot/robot_energy_cem_convergence.mp4" poster="media/robot/robot_energy_cem_convergence_poster.jpg" muted loop playsinline preload="metadata" aria-label="3-D planner energy surfaces of V-JEPA 2.1 and Ours (joint) with CEM samples converging to the energy minimum"></video></figure>
-    <p class="rcap">CEM, the cross-entropy method, searches over moves by sampling. It draws 400 candidate moves, scores each with the predictor, keeps the 10 with the lowest energy (orange) and refits its sampling distribution to them, ten times, and the robot executes the final mean. Shown for a Grasp decision with the same input frames for both encoders, over the (&Delta;x, &Delta;z) plane through the demonstrated move: Ours (joint) forms a narrow well whose minimum lies <b class="n">0.3 cm</b> from the demonstrated move, while the minimum for V-JEPA 2.1 (frozen) lies <b class="n">1.4 cm</b> away.</p>
+    <h3>Success on 50 matched scenes</h3>
+    <div class="succ" id="succ" aria-label="Successes out of 50 matched scenes per task"></div>
+    <p class="rcap">Ours (SSL) and V-JEPA 2.1 share the scenes, reference subgoals, predictor training budget, planner settings and controller. Octo is a direct policy trained on the same robot trajectories. Exact two-sided McNemar tests against V-JEPA 2.1 give unadjusted <span class="n">p = 0.0004</span> for grasp-lift and <span class="n">p = 0.0005</span> for place.</p>
   </section>
   <script>
   (() => {
     const T = {
-      grasp: { label: 'Grasp', ours: 33, vj: 18, alt: 'Grasp: Ours (joint) lifts and holds the cube; V-JEPA 2.1 (frozen) drops it' },
-      place: { label: 'Place', ours: 29, vj: 17, alt: 'Place: Ours (joint) places the cube on the target; V-JEPA 2.1 (frozen) drops it' },
-      reach: { label: 'Reach with object', ours: 20, vj: 7, alt: 'Reach with object: Ours (joint) carries the cube to the target; V-JEPA 2.1 (frozen) drops it' },
+      grasp: { label: 'Grasp-lift', ours: 43, vj: 27, octo: 0, alt: 'Grasp-lift: Ours (SSL) lifts and holds the cube; V-JEPA 2.1 drops it and Octo does not lift it' },
+      place: { label: 'Place', ours: 42, vj: 23, octo: 0, alt: 'Place: Ours (SSL) places the cube on the target; V-JEPA 2.1 drops it and Octo does not reach the target' },
     };
-    const S = [['Grasp', 18, 26, 33], ['Place', 17, 25, 29], ['Reach with object', 7, 16, 20]], C = ['#5a6487', '#F4A259', '#E2601B'], N = ['V-JEPA 2.1 (frozen)', 'Ours (SSL)', 'Ours (joint)'];
+    const S = [['Grasp-lift', 0, 27, 43], ['Place', 0, 23, 42]], C = ['#5a6487', '#5aa2ff', '#E2601B'], N = ['Octo', 'V-JEPA 2.1', 'Ours (SSL)'];
     document.getElementById('succ').innerHTML = S.map(([t, ...v]) => `<div class="row"><div class="task">${t}</div><div class="bars">${v.map((k, i) => `<div class="bar" title="${N[i]}: ${k} / 50"><i style="width:${2 * k}%;background:${C[i]}"></i><b>${k}</b></div>`).join('')}</div></div>`).join('')
       + `<div class="legend">${N.map((n, i) => `<span><i style="background:${C[i]}"></i>${n}</span>`).join('')}</div>`;
     const vid = document.getElementById('rb-video'), cap = document.getElementById('rb-cap'), tabs = document.querySelectorAll('.rtabs .tab');
     const show = (k) => {
       const t = T[k];
       tabs.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.task === k)));
-      vid.poster = `media/robot/robot_${k}_joint_vs_vjepa21_poster.jpg`; vid.src = `media/robot/robot_${k}_joint_vs_vjepa21.mp4`; vid.setAttribute('aria-label', t.alt);
-      cap.innerHTML = `<b>${t.label}</b>, successes on 50 fresh scenes: <b class="n">Ours (joint) ${t.ours}</b> vs <span class="n">V-JEPA 2.1 (frozen) ${t.vj}</span>.`;
+      vid.poster = `media/robot/demo_${k}_ours_vjepa21_octo_poster.jpg`; vid.src = `media/robot/demo_${k}_ours_vjepa21_octo.mp4`; vid.setAttribute('aria-label', t.alt);
+      cap.innerHTML = `<b>${t.label}</b>, successes on 50 matched scenes: <b class="n">Ours (SSL) ${t.ours}</b> vs <span class="n">V-JEPA 2.1 ${t.vj}</span> vs <span class="n">Octo ${t.octo}</span>.`;
       if (vid.dataset.visible === '1') vid.play().catch(() => {});
     };
     tabs.forEach(b => b.addEventListener('click', () => show(b.dataset.task)));
@@ -436,7 +430,7 @@ a.lbtn:hover, a.lbtn:focus-visible { box-shadow: 0 0 16px -4px var(--neon); tran
       e.target.dataset.visible = e.isIntersecting ? '1' : '0';
       if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause();
     }), { threshold: 0.25 });
-    [vid, document.getElementById('rb-energy'), document.getElementById('intro-video')].forEach(v => io.observe(v));
+    [vid, document.getElementById('intro-video')].forEach(v => io.observe(v));
     show('grasp');
   })();
   </script>
